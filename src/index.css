@@ -1,0 +1,86 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  font-weight: 500;
+  color: #000; /* Nhẹ nhàng trắng xám cho dark */
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+a:hover {
+  color: #333; /* sáng bật khi hover */
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: inherit;
+  color: inherit;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+  color: inherit;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a; /* tối giản */
+  color: #fff;
+  cursor: pointer;
+  transition: border-color 0.25s, background-color 0.25s;
+}
+button:hover {
+  border-color: #fff; /* trắng bật trên nền tối */
+  background-color: #333; /* nền tối hơn */
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* Light mode */
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #121212; /* Đen đậm */
+    background-color: #fff; /* Trắng tinh */
+  }
+  a {
+    color: #333; /* Đen xám cho link */
+  }
+  a:hover {
+    color: #000; /* Đen chuẩn */
+  }
+  button {
+    background-color: #fff; /* Nền trắng */
+    color: #121212; /* chữ đen */
+    border: 1px solid #121212;
+  }
+  button:hover {
+    border-color: #000;
+    background-color: #f0f0f0;
+  }
+}
