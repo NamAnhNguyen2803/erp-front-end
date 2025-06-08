@@ -5,7 +5,7 @@ import DashboardPage from '../pages/DashboardPage';
 import ManufacturingPlansPage from '../pages/Manufacturing/ManufacturingPlansPage';
 import ManufacturingOrdersPage from '../pages/Manufacturing/ManufacturingOrdersPage';
 import ManufacturingStepsPage from '../pages/ManufacturingStepsPage';
-import ManufacturingWorkOrdersPage from '../pages/Manufacturing/ManufacturingWorkOrdersPage';
+import ManufacturingWorkOrdersPage from '../pages/Manufacturing/Work Order/ManufacturingWorkOrdersPage';
 import InventoryWarehousesPage from '../pages/Inventory/InventoryWarehousesPage';
 import InventoryStockPage from '../pages/Inventory/InventoryStockPage';
 import InventoryTransactionsPage from '../pages/Inventory/InventoryTransactionsPage';
@@ -21,7 +21,7 @@ import ReportsInventoryPage from '../pages/ReportsInventoryPage';
 import MaterialPage from '../pages/Material/MaterialPage';
 import ManufacturingOrderDetailPage from '../pages/Manufacturing/ManufacturingOrderDetailPage';
 import ManufacturingPlanDetailPage from '../pages/Manufacturing/ManufacturingPlanDetailPage';
-import ManufacturingWorkOrderDetailPage from '../pages/Manufacturing/ManufacturingWorkOrderDetailPage';
+import ManufacturingWorkOrderDetailPage from '../pages/Manufacturing/Work Order/ManufacturingWorkOrderDetailPage';
 const AppRoutes = () => {
   return (
     <Routes>

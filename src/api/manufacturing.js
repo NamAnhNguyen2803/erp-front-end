@@ -35,6 +35,7 @@ export const getWorkOrderDetail = (id) => axios.get(`${API_URL}/work-orders/${id
 export const startWorkOrder = (id) => axios.patch(`${API_URL}/work-orders/${id}/start`);
 export const completeWorkOrder = (id) => axios.patch(`${API_URL}/work-orders/${id}/complete`);
 export const assignWorkOrder = (id, data) => axios.patch(`${API_URL}/work-orders/${id}/assign`, data);
+// export const checkMaterialAvailability = (id) => axios.get(`${API_URL}/work-orders/${id}/material-status`);
 
 export const getRequirements = () => axios.get(`${API_URL}/requirements`);
 export const createRequirement = (data) => axios.post(`${API_URL}/requirements`, data);

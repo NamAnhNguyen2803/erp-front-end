@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Tag, Badge, message, Spin } from 'antd';
-import { getWorkOrders } from '../../api/manufacturing';
-import ManufacturingLayout from '../../layouts/ManufacturingLayout';
+import { getWorkOrders } from '../../../api/manufacturing';
+import ManufacturingLayout from '../../../layouts/ManufacturingLayout';
 import moment from 'moment';
 
 const statusColors = {

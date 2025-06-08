@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Card, Descriptions, Tag, Table, Badge, Timeline, Spin, Row, Col, Typography, Button, Modal, message } from 'antd';
-import { getWorkOrderDetail, startWorkOrder, completeWorkOrder, getMaterialStatus } from '../../api/manufacturing';
+import { Card, Descriptions, Tag, Badge, Timeline, Spin, Row, Col, Typography, Button, message } from 'antd';
+import { Modal } from 'antd';
+import { getWorkOrderDetail, startWorkOrder, completeWorkOrder, getMaterialStatus } from '../../../api/manufacturing';
+import MaterialRequirementsTable from './components/MaterialRequirementsTable';
 import moment from 'moment';
-
 const { Title } = Typography;
-const { confirm } = Modal;
+
 
 const statusLabels = {
   pending: 'Chờ thực hiện',
@@ -42,58 +43,13 @@ export default function ManufacturingWorkOrderDetailPage() {
   const [error, setError] = useState(null);
   const [actionLoading, setActionLoading] = useState(false);
   const [materialStatus, setMaterialStatus] = useState(null);
-
-
+  const [materialLoading, setMaterialLoading] = useState(false);
 
   useEffect(() => {
     if (!id) return;
     fetchDetail();
     fetchMaterialStatus();
   }, [id]);
-
-  const materialRequirementsColumns = [
-    {
-      title: 'Work ID',
-      dataIndex: 'work_id',
-      key: 'work_id',
-    },
-    {
-      title: 'Material ID',
-      dataIndex: 'material_id',
-      key: 'material_id',
-    },
-    {
-      title: 'Quantity',
-      dataIndex: 'quantity',
-      key: 'quantity',
-      render: (val) => Number(val).toLocaleString(),
-    },
-  ];
-
-  const bomItemsColumns = [
-    {
-      title: 'Item ID',
-      dataIndex: 'item_id',
-      key: 'item_id',
-    },
-    {
-      title: 'Material ID',
-      dataIndex: 'material_id',
-      key: 'material_id',
-    },
-    {
-      title: 'Material Name',
-      dataIndex: 'material_name',
-      key: 'material_name',
-    },
-    {
-      title: 'Quantity',
-      dataIndex: 'quantity',
-      key: 'quantity',
-      render: (val) => parseFloat(val).toFixed(2),
-    },
-  ];
-
 
   const fetchDetail = () => {
     setLoading(true);
@@ -106,6 +62,21 @@ export default function ManufacturingWorkOrderDetailPage() {
       .catch(() => setError('Không thể tải dữ liệu'))
       .finally(() => setLoading(false));
   };
+
+  const fetchMaterialStatus = () => {
+    setMaterialLoading(true);
+    getMaterialStatus(id)
+      .then(res => {
+        console.log("🚀 Material status:", res.data.data.materials);
+        setMaterialStatus(res.data.data || []);
+      })
+      .catch(err => {
+        console.error('Error fetching material status:', err);
+        setError('Không thể tải dữ liệu nguyên vật liệu');
+      })
+      .finally(() => setMaterialLoading(false));
+  };
+
   const formatDate = (date) => date ? moment(date).format('DD/MM/YYYY HH:mm') : '';
 
   const handleStart = () => {
@@ -119,41 +90,77 @@ export default function ManufacturingWorkOrderDetailPage() {
       .finally(() => setActionLoading(false));
   };
 
-
-  const fetchMaterialStatus = () => {
-    getMaterialStatus(id)
-      .then(res => {
-        console.log("🚀 res.data1", res.data.bom);
-        setMaterialStatus(res.data.data)
-      })
-      .catch(() => setError('Không thể tải dữ liệu'));
-  };
-
   const handleComplete = () => {
-    confirm({
+    if (!workOrder) {
+      message.error("Dữ liệu ca sản xuất chưa sẵn sàng");
+      return;
+    }
+
+    console.log('handleComplete called');
+
+    Modal.confirm({
       title: 'Xác nhận hoàn thành sản xuất?',
+      content: 'Ca sản xuất sẽ được đánh dấu là hoàn thành.',
+      okText: 'Đồng ý',
+      cancelText: 'Hủy',
       onOk() {
-        setActionLoading(true);
-        return completeWorkOrder(id)
-          .then(() => {
-            message.success('Hoàn thành sản xuất thành công');
-            fetchDetail();
-          })
-          .catch(() => message.error('Hoàn thành sản xuất thất bại'))
-          .finally(() => setActionLoading(false));
+        console.log('onOk called');
+        return new Promise((resolve, reject) => {
+          executeComplete()
+            .then(resolve)
+            .catch(reject);
+        });
       }
     });
   };
 
+
+
+  const executeComplete = async () => {
+    console.log('executeComplete called');
+
+    try {
+      setActionLoading(true);
+
+      const completeData = {
+        actual_end: new Date().toISOString(),
+        completed_qty: workOrder.work_quantity,
+        status: 'completed',
+        notes: workOrder.notes || 'Hoàn thành sản xuất'
+      };
+
+      console.log('Sending data:', completeData);
+
+      await completeWorkOrder(id, completeData);
+      message.success('Hoàn thành sản xuất thành công');
+      await fetchDetail();
+      await fetchMaterialStatus();
+    } catch (error) {
+      console.error('Complete error:', error);
+      message.error(error.response?.data?.message || 'Hoàn thành sản xuất thất bại');
+      throw error; // để Modal.confirm xử lý reject
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+
+
+  const handleMaterialRefresh = () => {
+    fetchMaterialStatus();
+  };
+
   // --- RENDER ---
-  // Nếu đang loading, show spinner, lỗi show lỗi, không có data show trống
-  if (loading) return <Spin spinning={true} tip="Đang tải dữ liệu..." style={{ width: '100%', padding: 50 }} />;
+  if (loading) return (
+    <div style={{ width: '100%', padding: 50, textAlign: 'center' }}>
+      <Spin size="large" />
+      <div style={{ marginTop: 16 }}>Đang tải dữ liệu...</div>
+    </div>
+  );
 
   if (error) return <div style={{ color: 'red', padding: 20 }}>{error}</div>;
 
   if (!workOrder) return <div>Không có dữ liệu Work Order</div>;
-
-  // Đảm bảo workOrder khác null đến đây
 
   return (
     <div style={{ padding: 24 }}>
@@ -167,7 +174,7 @@ export default function ManufacturingWorkOrderDetailPage() {
 
         <Col xs={24} md={16}>
           <Card
-            bordered
+            variant="outlined"
             style={{ marginBottom: 24 }}
             extra={
               <>
@@ -187,15 +194,17 @@ export default function ManufacturingWorkOrderDetailPage() {
                   </Button>
                 )}
                 {workOrder.status === 'completed' && (
-                  <Button loading={actionLoading} >
+                  <Button loading={actionLoading} disabled>
                     Đã hoàn thành
                   </Button>
                 )}
               </>
             }
           >
-            <Descriptions column={2} bordered size="middle">
-              <Descriptions.Item label="Mã Work Order">{workOrder.work_code || '—'}</Descriptions.Item>
+
+            <Descriptions column={2} variant="bordered" size="middle">
+              <Descriptions.Item label="Tên đơn sản xuất">{workOrder.ManufacturingOrder?.order_number || '—'}</Descriptions.Item>
+              <Descriptions.Item label="Mã ca sản xuất">{workOrder.work_code || '—'}</Descriptions.Item>
               <Descriptions.Item label="ID sản phẩm">{workOrder.item_id || '—'}</Descriptions.Item>
               <Descriptions.Item label="Tên sản phẩm">{workOrder.item_name || '—'}</Descriptions.Item>
               <Descriptions.Item label="Đơn vị sản phẩm">{workOrder.ManufacturingOrderDetail?.itemInfo?.unit || '—'}</Descriptions.Item>
@@ -221,56 +230,61 @@ export default function ManufacturingWorkOrderDetailPage() {
               <Descriptions.Item label="Ngày bắt đầu thực tế">{formatDate(workOrder.actual_start)}</Descriptions.Item>
               <Descriptions.Item label="Ngày kết thúc thực tế">{formatDate(workOrder.actual_end)}</Descriptions.Item>
               <Descriptions.Item label="Người phụ trách">{workOrder.AssignedUser?.username || '—'}</Descriptions.Item>
-              <Descriptions.Item label="Mô tả" span={2}>{workOrder.description || '—'}</Descriptions.Item>
-              <Descriptions.Item label="Ghi chú" span={2}>{workOrder.notes || '—'}</Descriptions.Item>
+              <Descriptions.Item label="Mô tả">{workOrder.description || '—'}</Descriptions.Item>
+              <Descriptions.Item label="Ghi chú">{workOrder.notes || '—'}</Descriptions.Item>
             </Descriptions>
           </Card>
         </Col>
 
         <Col xs={24} md={8}>
-          <Card title="Quy trình & Trạng thái" bordered>
-            <Timeline mode="left">
-              <Timeline.Item color={statusColors[workOrder.status] || 'blue'}>
-                <b>{statusLabels[workOrder.status] || workOrder.status}</b> - {formatDate(workOrder.actual_start)}
-              </Timeline.Item>
-            </Timeline>
+          <Card title="Quy trình & Trạng thái" variant="outlined">
+            <Timeline
+              mode="left"
+              items={[
+                {
+                  color: statusColors[workOrder.status] || 'blue',
+                  children: (
+                    <>
+                      <b>{statusLabels[workOrder.status] || workOrder.status}</b> - {formatDate(workOrder.actual_start)}
+                    </>
+                  )
+                }
+              ]}
+            />
           </Card>
         </Col>
 
-        <Row gutter={30}>
-          <Col xs={24}>
-            <Card style={{ marginTop: 0 }}>
-              <Table
-                title={() => <b>BOM</b>}
-                rowKey="item_id"
-                columns={bomItemsColumns}
-                dataSource={materialStatus?.bom ?? []}
-                pagination={false}
-                bordered
-                size="small"
+        {/* Bảng nguyên vật liệu */}
+        <Col xs={24}>
+          <Card
+            title="Nguyên vật liệu cần thiết"
+            style={{ marginTop: 24 }}
+            loading={materialLoading}
+            extra={
+              <Button onClick={handleMaterialRefresh} size="small">
+                Làm mới
+              </Button>
+            }
+          >
+            {materialStatus && materialStatus.materials ? (
+              <MaterialRequirementsTable
+                materialData={materialStatus.materials}
+                workOrderData={materialStatus.workOrder}
+                bomData={materialStatus.bom}
+                workOrderId={id}
+                onRefresh={handleMaterialRefresh}
               />
-            </Card>
-          </Col>
-          <Col xs={24}>
-            <Card style={{ marginTop: 0 }}>
-              <Table
-                title={() => <b>Yêu cầu vật tư</b>}
-                rowKey="item_id"
-                columns={materialRequirementsColumns}
-                dataSource={materialStatus?.materialRequirements ?? []}
-                pagination={false}
-                bordered
-                size="small"
-              />
-            </Card>
-          </Col>
-        </Row>
-
-
+            ) : (
+              <div style={{ textAlign: 'center', padding: 40 }}>
+                Không có dữ liệu nguyên vật liệu
+              </div>
+            )}
+          </Card>
+        </Col>
 
         <Col xs={24}>
           <Card title="Thông tin đơn sản xuất" style={{ marginTop: 24 }}>
-            <Descriptions column={2} bordered size="small">
+            <Descriptions column={2} variant="bordered" size="small">
               <Descriptions.Item label="Số đơn">{workOrder.ManufacturingOrder?.order_number || '—'}</Descriptions.Item>
               <Descriptions.Item label="Ngày bắt đầu">{formatDate(workOrder.ManufacturingOrder?.start_date)}</Descriptions.Item>
               <Descriptions.Item label="Ngày kết thúc">{formatDate(workOrder.ManufacturingOrder?.end_date)}</Descriptions.Item>
@@ -283,28 +297,6 @@ export default function ManufacturingWorkOrderDetailPage() {
           </Card>
         </Col>
 
-        <Col xs={24}>
-          <Card title="Chi tiết đơn hàng" style={{ marginTop: 24 }}>
-            {Array.isArray(workOrder.ManufacturingOrderDetail) && workOrder.ManufacturingOrderDetail.length > 0 ? (
-              <Descriptions column={2} bordered size="small">
-                {workOrder.ManufacturingOrderDetail.map((detail, idx) => (
-                  <React.Fragment key={idx}>
-                    <Descriptions.Item label="Quy cách">{detail.specification || '—'}</Descriptions.Item>
-                    <Descriptions.Item label="Số lượng">{detail.quantity || 0}</Descriptions.Item>
-                    <Descriptions.Item label="Đã SX">{detail.produced_qty || 0}</Descriptions.Item>
-                    <Descriptions.Item label="Ưu tiên">
-                      <Tag color={priorityColors[detail.priority] || 'default'}>
-                        {priorityLabels[detail.priority] || detail.priority || '—'}
-                      </Tag>
-                    </Descriptions.Item>
-                  </React.Fragment>
-                ))}
-              </Descriptions>
-            ) : (
-              <div>Không có chi tiết đơn hàng</div>
-            )}
-          </Card>
-        </Col>
       </Row>
     </div>
   );
