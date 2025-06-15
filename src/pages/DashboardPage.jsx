@@ -1,63 +1,47 @@
 import React from 'react';
 import { Card, Row, Col, Statistic } from 'antd';
-import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
+import { useTheme } from '../contexts/ThemeContext';
+import ThemeSelector from '../components/ThemeSelector';
+import ThemeButton from '../components/ThemeButton';
 
-const DashboardPage = () => {
+const Dashboard = () => {
+  const { currentTheme } = useTheme();
+
   return (
     <div>
-      <h1>Dashboard</h1>
-      <Row gutter={16}>
+      <ThemeSelector />
+      
+      <Row gutter={[16, 16]}>
         <Col span={6}>
-          <Card>
+          <Card 
+            style={{ 
+              borderColor: currentTheme.primary,
+              backgroundColor: currentTheme.cardBg 
+            }}
+          >
             <Statistic
-              title="Sản phẩm"
-              value={11.28}
-              precision={2}
-              valueStyle={{ color: '#3f8600' }}
-              prefix={<ArrowUpOutlined />}
-              suffix="%"
+              title="Tổng sản phẩm"
+              value={1128}
+              valueStyle={{ color: currentTheme.primary }}
             />
           </Card>
         </Col>
-        <Col span={6}>
-          <Card>
-            <Statistic
-              title="Kho hàng"
-              value={9.3}
-              precision={2}
-              valueStyle={{ color: '#cf1322' }}
-              prefix={<ArrowDownOutlined />}
-              suffix="%"
-            />
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card>
-            <Statistic
-              title="Sản xuất"
-              value={15.5}
-              precision={2}
-              valueStyle={{ color: '#3f8600' }}
-              prefix={<ArrowUpOutlined />}
-              suffix="%"
-            />
-          </Card>
-        </Col>
-        <Col span={6}>
-          <Card>
-            <Statistic
-              title="Báo cáo"
-              value={7.2}
-              precision={2}
-              valueStyle={{ color: '#cf1322' }}
-              prefix={<ArrowDownOutlined />}
-              suffix="%"
-            />
-          </Card>
-        </Col>
+        {/* Các card khác... */}
       </Row>
+
+      <div style={{ marginTop: 24 }}>
+        <ThemeButton buttonType="creative">
+          Tạo kế hoạch mới
+        </ThemeButton>
+        <ThemeButton style={{ marginLeft: 8 }}>
+          Xem báo cáo
+        </ThemeButton>
+        <ThemeButton buttonType="balance" style={{ marginLeft: 8 }}>
+          Bắt đầu sản xuất
+        </ThemeButton>
+      </div>
     </div>
   );
 };
 
-export default DashboardPage; 
+export default Dashboard;

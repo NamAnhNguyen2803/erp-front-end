@@ -19,7 +19,8 @@ const InventoryTableLayout = ({
   actions,
 }) => {
   return (
-    <div className="px-10 py-5">
+    <div >
+      {/* <div className="px-10 py-5"></div> */}
       <div className="max-w-[960px] mx-auto">
         {/* Header */}
         <div className="flex flex-wrap justify-between gap-3 p-4">

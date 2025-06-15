@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Spin, Button, Tag } from 'antd';
-import ProductTableLayout from '../../components/ProductTableLayout';
+import ProductTableLayout from '@/components/ProductTableLayout';
 
 const tabs = [
   { label: 'Vật tư', key: 'materials', endpoint: '/api/v1/inventory/materials' },

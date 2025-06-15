@@ -5,13 +5,13 @@ import {
 } from 'antd';
 import moment from 'moment';
 import {
-  getOrderDetail,
+  getOrderByOrderId,
   createOrderDetail,
   updateOrderDetail,
   approveOrder,
   deleteOrderDetail
-} from '../../api/manufacturing';
-import { getProducts } from '../../api/products';
+} from '../../../api/manufacturing';
+import { getProducts } from '../../../api/products';
 import { Descriptions } from 'antd';
 const { Option } = Select;
 
@@ -30,7 +30,7 @@ const ManufacturingPlanDetailPage = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await getOrderDetail(id);
+      const res = await getOrderByOrderId(id);
       setOrder(res.data);
       const prodRes = await getProducts();
       setProducts(prodRes.data.products);

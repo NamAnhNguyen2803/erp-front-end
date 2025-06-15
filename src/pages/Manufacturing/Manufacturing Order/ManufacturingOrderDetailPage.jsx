@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Descriptions, Tag, Progress, Tabs, Table, Spin, Modal, Button, Input, Pagination } from 'antd';
 import { useParams } from 'react-router-dom';
-import { getOrderDetail, getWorkOrderDetail } from '../../api/manufacturing';
+import { getOrderByOrderId, getWorkOrderDetail } from '@/api/manufacturing';
 import { Breadcrumb } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
-import WorkOrderList from '../../components/WorkOrderList';
+import WorkOrderList from '@/components/WorkOrderList';
 const statusColors = {
   pending: 'blue',
   active: 'cyan',
@@ -38,7 +38,7 @@ const workOrderColumns = [
 const priorityOrder = { high: 1, medium: 2, low: 3 };
 
 const productColumns = [
-  { title: 'Mã sản phẩm', dataIndex: 'detail_id', key: 'detail_id' },
+  { title: 'Mã thành phẩm', dataIndex: 'detail_id', key: 'detail_id' },
   { title: 'Tên thành phẩm', dataIndex: 'item_name', key: 'item_name' },
   { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
   {
@@ -51,6 +51,7 @@ const productColumns = [
       return <Tag color={color}>{text}</Tag>;
     }
   },
+  { title: 'Đã sản xuất', dataIndex: 'produced_qty', key: 'produced_qty' },
   { title: 'Bắt đầu', dataIndex: 'planned_start', key: 'planned_start', render: (text) => text ? new Date(text).toLocaleString() : '' },
   { title: 'Kết thúc', dataIndex: 'planned_end', key: 'planned_end', render: (text) => text ? new Date(text).toLocaleString() : '' },
   { title: 'Ghi chú', dataIndex: 'notes', key: 'notes' },
@@ -77,7 +78,7 @@ const ManufacturingOrderDetailPage = () => {
   useEffect(() => {
     if (!id) return;
     setLoading(true);
-    getOrderDetail(id)
+    getOrderByOrderId(id)
       .then(res => {
         setOrder(res.data);
         setLoading(false);
@@ -95,7 +96,7 @@ const ManufacturingOrderDetailPage = () => {
     getWorkOrderDetail(id)
       .then(res => {
         let data = res.data || [];
- 
+
         // Filter by search and status
         if (woSearch) {
           data = data.filter(
@@ -134,6 +135,17 @@ const ManufacturingOrderDetailPage = () => {
     if (p1 !== p2) return p1 - p2;
     return new Date(a.planned_start) - new Date(b.planned_start);
   });
+  const calculateProgress = () => {
+    const products = order?.ManufacturingOrderDetails || [];
+    if (!products.length) return 0;
+
+    const totalRequired = products.reduce((sum, p) => sum + (p.quantity || 0), 0);
+    const totalProduced = products.reduce((sum, p) => sum + (p.produced_qty || 0), 0);
+
+    if (totalRequired === 0) return 0;
+
+    return Math.round((totalProduced / totalRequired) * 100);
+  };
 
   return (
     <div>
@@ -161,7 +173,7 @@ const ManufacturingOrderDetailPage = () => {
                 <Tag color={statusColors[order.status] || 'default'}>{statusLabels[order.status] || order.status}</Tag>
               </Descriptions.Item>
               <Descriptions.Item label="Tiến độ">
-                <Progress percent={0} size="small" />
+                <Progress percent={calculateProgress()} size="small" />
               </Descriptions.Item>
             </Descriptions>
           </Card>

@@ -3,6 +3,7 @@ import { Table, Button, Modal, Form, Input, Select, DatePicker, InputNumber, mes
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { getWorkOrdersByOrderId, createWorkOrder } from '../api/manufacturing'; // Đường dẫn tùy theo cấu trúc project
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -12,6 +13,7 @@ const WorkOrderList = ({ orderId, orderDetails }) => {
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [form] = Form.useForm();
+  const navigate = useNavigate();
 
   // Load work orders khi component mount
   useEffect(() => {
@@ -56,11 +58,18 @@ const WorkOrderList = ({ orderId, orderDetails }) => {
 
   const columns = [
     {
-      title: 'Mã Work Order',
+      title: 'Mã ca sản xuất',
+      dataIndex: 'work_id',
+      key: 'work_id',
+      width: 120,
+    },
+    {
+      title: 'Tên ca sản xuất',
       dataIndex: 'work_code',
       key: 'work_code',
       width: 150,
     },
+   
     {
       title: 'Công đoạn',
       dataIndex: 'process_step',
@@ -184,6 +193,10 @@ const WorkOrderList = ({ orderId, orderDetails }) => {
           showQuickJumper: true,
           showTotal: (total) => `Tổng ${total} work orders`,
         }}
+        onRow={(record) => ({
+          onClick: () => navigate(`/manufacturing-work-orders/${record.work_id}`),
+          style: { cursor: 'pointer' }, // Cho hiệu ứng trực quan hơn
+        })}
       />
 
       <Modal

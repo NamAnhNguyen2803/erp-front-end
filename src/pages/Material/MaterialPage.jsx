@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Modal, Form, Input, Select, Spin, Button, Tag, message } from 'antd';
-import ProductTableLayout from '../../components/ProductTableLayout';
+import { Modal, Form, Input, Select, Spin, Button, Tag, message, Popconfirm, Space } from 'antd';
+import ProductTableLayout from '@/components/ProductTableLayout';
 import {
   PlusOutlined,
   EditOutlined,
@@ -178,16 +178,20 @@ const MaterialManagementPage = () => {
     {
       title: 'Hành động',
       render: (_, record) => (
-        <span>
-          <Button type="link" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
-            Sửa
-          </Button>
-          <Button type="link" danger icon={<DeleteOutlined />} onClick={() => handleDelete(record)}>
-            Xóa
-          </Button>
-        </span>
+        <Space>
+          <Button icon={<EditOutlined />} onClick={() => handleEdit(record)} />
+          <Popconfirm
+            title="Bạn có chắc chắn muốn xóa mục này?"
+            onConfirm={() => handleDelete(record)}
+            okText="Xóa"
+            cancelText="Hủy"
+          >
+            <Button icon={<DeleteOutlined />} danger />
+          </Popconfirm>
+        </Space>
       ),
     },
+    
   ];
 
   return (

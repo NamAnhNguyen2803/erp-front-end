@@ -9,13 +9,15 @@ export const updatePlan = (id, data) => axios.put(`${API_URL}/plans/${id}`, data
 export const deletePlan = (id) => axios.delete(`${API_URL}/plans/${id}`);
 
 export const getAllOrders = () => axios.get(`${API_URL}/orders`);
-export const getOrderDetail = (id) => axios.get(`${API_URL}/orders/${id}`);
+export const getOrderByOrderId = (id) => axios.get(`${API_URL}/orders/${id}`);
 export const createOrder = (data) => axios.post(`${API_URL}/orders`, data);
 export const updateOrder = (id, data) => axios.put(`${API_URL}/orders/${id}`, data);
 export const deleteOrder = (id) => axios.delete(`${API_URL}/orders/${id}`);
 export const approveOrder = (id) => axios.patch(`${API_URL}/orders/${id}/approve`);
 
+
 export const getAllOrdersDetails = () => axios.get(`${API_URL}/order-details`);
+export const getOrderDetailByOrderId = (id) => axios.get(`${API_URL}/order-details/${id}`);
 export const createOrderDetail = (data) => axios.post(`${API_URL}/order-details`, data);
 export const updateOrderDetail = (id, data) => axios.put(`${API_URL}/order-details/${id}`, data);
 export const deleteOrderDetail = (id) => axios.delete(`${API_URL}/order-details/${id}`);

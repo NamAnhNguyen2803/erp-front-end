@@ -1,0 +1,43 @@
+/* Hệ thống màu sắc dựa trên tâm lý học công nghiệp */
+:root {
+    /* Màu chủ đạo - Xanh dương (Tập trung & Tin tưởng) */
+    --primary-blue: #2563eb;
+    --primary-blue-hover: #3b82f6;
+    --primary-blue-active: #1d4ed8;
+    --primary-blue-light: #dbeafe;
+    --primary-blue-disabled: #e0e7ff;
+  
+    /* Màu sáng tạo - Vàng (Brainstorming & Lạc quan) */
+    --creativity-yellow: #f59e0b;
+    --creativity-yellow-light: #fef3c7;
+    --creativity-yellow-hover: #d97706;
+  
+    /* Màu cân bằng - Xanh lá (Tập trung lâu dài) */
+    --balance-green: #059669;
+    --balance-green-light: #d1fae5;
+    --balance-green-hover: #047857;
+  
+    /* Màu thư giãn - Hồng (Khu vực nghỉ ngơi) */
+    --relax-pink: #ec4899;
+    --relax-pink-light: #fce7f3;
+    --relax-pink-hover: #db2777;
+  
+    /* Màu nền theo chức năng */
+    --bg-white: #ffffff;
+    --bg-focus-area: #f0f9ff;
+    --bg-creative-area: #fffbeb;
+    --bg-balance-area: #f0fdf4;
+    --bg-relax-area: #fdf2f8;
+  
+    /* Màu văn bản */
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --text-tertiary: #9ca3af;
+    --text-on-color: #ffffff;
+  
+    /* Màu trạng thái */
+    --success: #059669;
+    --warning: #f59e0b;
+    --error: #dc2626;
+    --info: #2563eb;
+  }

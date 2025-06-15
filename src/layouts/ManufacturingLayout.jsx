@@ -17,7 +17,7 @@ const ManufacturingLayout = ({
   onRow,
 }) => {
   return (
-    <div style={{ padding: 24, background: '#fff', borderRadius: 8 }}>
+    <div style={{  background: '#fff', borderRadius: 8 }}>
       {/* Breadcrumb + Title + Add Button */}
       <div style={{ marginBottom: 16 }}>
         <Breadcrumb style={{ marginBottom: 8 }}>

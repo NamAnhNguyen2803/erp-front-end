@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Card, Descriptions, Tag, Badge, Timeline, Spin, Row, Col, Typography, Button, message } from 'antd';
+import { Card, Descriptions, Tag, Badge, Timeline, Spin, Row, Col, Typography, Button, message, Alert } from 'antd';
 import { Modal } from 'antd';
-import { getWorkOrderDetail, startWorkOrder, completeWorkOrder, getMaterialStatus } from '../../../api/manufacturing';
+import { LinkOutlined } from '@ant-design/icons';
+import { getWorkOrderDetail, startWorkOrder, completeWorkOrder, getMaterialStatus } from '@/api/manufacturing';
 import MaterialRequirementsTable from './components/MaterialRequirementsTable';
 import moment from 'moment';
 const { Title } = Typography;
@@ -55,19 +56,17 @@ export default function ManufacturingWorkOrderDetailPage() {
     setLoading(true);
     getWorkOrderDetail(id)
       .then(res => {
-        console.log("🚀 res.data", res.data);
         setWorkOrder(res.data.data);
         setError(null);
       })
       .catch(() => setError('Không thể tải dữ liệu'))
       .finally(() => setLoading(false));
   };
-
+  
   const fetchMaterialStatus = () => {
     setMaterialLoading(true);
     getMaterialStatus(id)
       .then(res => {
-        console.log("🚀 Material status:", res.data.data.materials);
         setMaterialStatus(res.data.data || []);
       })
       .catch(err => {
@@ -79,7 +78,25 @@ export default function ManufacturingWorkOrderDetailPage() {
 
   const formatDate = (date) => date ? moment(date).format('DD/MM/YYYY HH:mm') : '';
 
+  // Kiểm tra nguyên liệu có đủ không
+  const checkMaterialAvailability = () => {
+    if (!materialStatus || !materialStatus.materials) return false;
+
+    return materialStatus.materials.every(material => {
+      const productionStock = material.production_stock || 0;
+      const requiredQty = material.required_quantity || 0;
+      return productionStock >= requiredQty;
+    });
+  };
+
+
   const handleStart = () => {
+    // Kiểm tra nguyên liệu trước khi bắt đầu
+    if (!checkMaterialAvailability()) {
+      message.error('Nguyên liệu chưa đủ trong kho sản xuất. Vui lòng kiểm tra lại.');
+      return;
+    }
+
     setActionLoading(true);
     startWorkOrder(id)
       .then(() => {
@@ -114,8 +131,6 @@ export default function ManufacturingWorkOrderDetailPage() {
     });
   };
 
-
-
   const executeComplete = async () => {
     console.log('executeComplete called');
 
@@ -138,16 +153,101 @@ export default function ManufacturingWorkOrderDetailPage() {
     } catch (error) {
       console.error('Complete error:', error);
       message.error(error.response?.data?.message || 'Hoàn thành sản xuất thất bại');
-      throw error; // để Modal.confirm xử lý reject
+      throw error;
     } finally {
       setActionLoading(false);
     }
   };
 
-
-
   const handleMaterialRefresh = () => {
     fetchMaterialStatus();
+  };
+
+  // Tạo timeline items dựa trên trạng thái và lịch sử
+  const getTimelineItems = () => {
+    const items = [];
+
+    // Tạo timeline từ dữ liệu có sẵn
+    if (workOrder.created_at) {
+      items.push({
+        color: 'blue',
+        children: (
+          <>
+            <b>Tạo ca sản xuất</b>
+            <br />
+            <small>{formatDate(workOrder.created_at)}</small>
+          </>
+        )
+      });
+    }
+
+    if (workOrder.actual_start) {
+      items.push({
+        color: 'cyan',
+        children: (
+          <>
+            <b>Bắt đầu sản xuất</b>
+            <br />
+            <small>{formatDate(workOrder.actual_start)}</small>
+          </>
+        )
+      });
+    }
+
+    // Thêm thông tin nhập kho sản xuất nếu có
+    if (materialStatus && materialStatus.materials && materialStatus.materials.length > 0) {
+      const hasInputMaterials = materialStatus.materials.some(m => m.input_date);
+      if (hasInputMaterials) {
+        items.push({
+          color: 'orange',
+          children: (
+            <>
+              <b>Nhập nguyên liệu vào kho sản xuất</b>
+              <br />
+              {materialStatus.materials
+                .filter(m => m.input_date)
+                .map(m => (
+                  <div key={m.id}>
+                    <small>{m.item_name}: {m.input_quantity} {m.unit} - {formatDate(m.input_date)}</small>
+                  </div>
+                ))
+              }
+            </>
+          )
+        });
+      }
+    }
+
+    if (workOrder.actual_end) {
+      items.push({
+        color: 'green',
+        children: (
+          <>
+            <b>Hoàn thành sản xuất</b>
+            <br />
+            <small>{formatDate(workOrder.actual_end)}</small>
+            <br />
+            <small>Số lượng hoàn thành: {workOrder.completed_qty}</small>
+          </>
+        )
+      });
+    }
+
+    // Nếu chưa có timeline items nào, hiển thị trạng thái hiện tại
+    if (items.length === 0) {
+      items.push({
+        color: statusColors[workOrder.status] || 'blue',
+        children: (
+          <>
+            <b>{statusLabels[workOrder.status] || workOrder.status}</b>
+            <br />
+            <small>Trạng thái hiện tại</small>
+          </>
+        )
+      });
+    }
+
+    return items;
   };
 
   // --- RENDER ---
@@ -162,6 +262,8 @@ export default function ManufacturingWorkOrderDetailPage() {
 
   if (!workOrder) return <div>Không có dữ liệu Work Order</div>;
 
+  const materialsAvailable = checkMaterialAvailability();
+
   return (
     <div style={{ padding: 24 }}>
       <Row gutter={[24, 24]}>
@@ -169,8 +271,21 @@ export default function ManufacturingWorkOrderDetailPage() {
           <Link to="/manufacturing/work-orders">← Quay lại danh sách Work Orders</Link>
         </Col>
         <Col xs={24}>
-          <Title level={2}>Chi tiết Ca sản xuất</Title>
+          <Title level={2}>Chi tiết ca sản xuất {workOrder.work_code}</Title>
         </Col>
+
+        {/* Cảnh báo nguyên liệu */}
+        {workOrder.status === 'pending' && !materialsAvailable && (
+          <Col xs={24}>
+            <Alert
+              message="Cảnh báo nguyên liệu"
+              description="Nguyên liệu chưa đủ trong kho sản xuất. Vui lòng kiểm tra và bổ sung nguyên liệu trước khi bắt đầu sản xuất."
+              type="warning"
+              showIcon
+              style={{ marginBottom: 16 }}
+            />
+          </Col>
+        )}
 
         <Col xs={24} md={16}>
           <Card
@@ -178,12 +293,24 @@ export default function ManufacturingWorkOrderDetailPage() {
             style={{ marginBottom: 24 }}
             extra={
               <>
+                {/* Nút truy cập đơn sản xuất */}
+                {workOrder.ManufacturingOrder?.order_id && (
+                  <Button
+                    icon={<LinkOutlined />}
+                    style={{ marginRight: 8 }}
+                    onClick={() => window.open(`http://localhost:5173/manufacturing-orders/${workOrder.ManufacturingOrder.order_id}`, '_blank')}
+                  >
+                    Xem đơn sản xuất
+                  </Button>
+                )}
+
                 {workOrder.status === 'pending' && (
                   <Button
                     type="primary"
                     loading={actionLoading}
                     onClick={handleStart}
                     style={{ marginRight: 8 }}
+                    disabled={!materialsAvailable}
                   >
                     Bắt đầu sản xuất
                   </Button>
@@ -205,6 +332,7 @@ export default function ManufacturingWorkOrderDetailPage() {
             <Descriptions column={2} variant="bordered" size="middle">
               <Descriptions.Item label="Tên đơn sản xuất">{workOrder.ManufacturingOrder?.order_number || '—'}</Descriptions.Item>
               <Descriptions.Item label="Mã ca sản xuất">{workOrder.work_code || '—'}</Descriptions.Item>
+              <Descriptions.Item label="Tên ca sản xuất">{workOrder.work_name || '—'}</Descriptions.Item>
               <Descriptions.Item label="ID sản phẩm">{workOrder.item_id || '—'}</Descriptions.Item>
               <Descriptions.Item label="Tên sản phẩm">{workOrder.item_name || '—'}</Descriptions.Item>
               <Descriptions.Item label="Đơn vị sản phẩm">{workOrder.ManufacturingOrderDetail?.itemInfo?.unit || '—'}</Descriptions.Item>
@@ -240,16 +368,7 @@ export default function ManufacturingWorkOrderDetailPage() {
           <Card title="Quy trình & Trạng thái" variant="outlined">
             <Timeline
               mode="left"
-              items={[
-                {
-                  color: statusColors[workOrder.status] || 'blue',
-                  children: (
-                    <>
-                      <b>{statusLabels[workOrder.status] || workOrder.status}</b> - {formatDate(workOrder.actual_start)}
-                    </>
-                  )
-                }
-              ]}
+              items={getTimelineItems()}
             />
           </Card>
         </Col>

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { message } from 'antd';
 import moment from 'moment';
-import { getAllOrders } from '../../api/manufacturing';
-import ManufacturingLayout from '../../layouts/ManufacturingLayout';
+import { getAllOrders } from '../../../api/manufacturing';
+import ManufacturingLayout from '../../../layouts/ManufacturingLayout';
 
 const ManufacturingPlansPage = () => {
   const [plans, setPlans] = useState([]);

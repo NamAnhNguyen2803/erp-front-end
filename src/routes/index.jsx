@@ -2,8 +2,8 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AppLayout from '../layouts/AppLayout';
 import DashboardPage from '../pages/DashboardPage';
-import ManufacturingPlansPage from '../pages/Manufacturing/ManufacturingPlansPage';
-import ManufacturingOrdersPage from '../pages/Manufacturing/ManufacturingOrdersPage';
+import ManufacturingPlansPage from '../pages/Manufacturing/Manufacturing Plan/ManufacturingPlansPage';
+import ManufacturingOrdersPage from '../pages/Manufacturing/Manufacturing Order/ManufacturingOrdersPage';
 import ManufacturingStepsPage from '../pages/ManufacturingStepsPage';
 import ManufacturingWorkOrdersPage from '../pages/Manufacturing/Work Order/ManufacturingWorkOrdersPage';
 import InventoryWarehousesPage from '../pages/Inventory/InventoryWarehousesPage';
@@ -19,8 +19,8 @@ import UsersPage from '../pages/UsersPage';
 import ReportsProductionPage from '../pages/ReportsProductionPage';
 import ReportsInventoryPage from '../pages/ReportsInventoryPage';
 import MaterialPage from '../pages/Material/MaterialPage';
-import ManufacturingOrderDetailPage from '../pages/Manufacturing/ManufacturingOrderDetailPage';
-import ManufacturingPlanDetailPage from '../pages/Manufacturing/ManufacturingPlanDetailPage';
+import ManufacturingOrderDetailPage from '../pages/Manufacturing/Manufacturing Order/ManufacturingOrderDetailPage';
+import ManufacturingPlanDetailPage from '../pages/Manufacturing/Manufacturing Plan/ManufacturingPlanDetailPage';
 import ManufacturingWorkOrderDetailPage from '../pages/Manufacturing/Work Order/ManufacturingWorkOrderDetailPage';
 const AppRoutes = () => {
   return (

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ProductTableLayout from '../../components/ProductTableLayout';
+import ProductTableLayout from '@/components/ProductTableLayout';
 import { Tag, Progress, Button, message, Spin } from 'antd';
-import { getAllOrders } from '../../api/manufacturing';
-import ManufacturingLayout from '../../layouts/ManufacturingLayout';
+import { getAllOrders } from '@/api/manufacturing';
+import ManufacturingLayout from '@/layouts/ManufacturingLayout';
 const statusColors = {
   pending: 'blue',
   active: 'cyan',

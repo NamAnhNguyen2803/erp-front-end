@@ -25,7 +25,6 @@ const HeaderComponent = () => {
   const manufacturingMenuItems = [
     { key: "/manufacturing/plans", label: <Link to="/manufacturing/plans">Kế hoạch sản xuất</Link> },
     { key: "/manufacturing/orders", label: <Link to="/manufacturing/orders">Lệnh sản xuất</Link> },
-    { key: "/manufacturing/steps", label: <Link to="/manufacturing/steps">Bước sản xuất</Link> },
     { key: "/manufacturing/work-orders", label: <Link to="/manufacturing/work-orders">Ca sản xuất</Link> },
   ];
 
@@ -45,41 +44,43 @@ const HeaderComponent = () => {
   const isActiveMenu = (keys) => keys.some(key => location.pathname.startsWith(key));
 
   return (
-    <Header className="header" style={{ background: "#fff", padding: "0 24px" }}>
+    <Header className="header" style={{
+      background: "var(--bg-white)",
+      padding: "0 24px",
+      borderBottom: "1px solid var(--primary-blue-light)"
+    }}>
       <div style={{ display: "flex", gap: "32px", alignItems: "center", height: "64px" }}>
-        <Link to="/" style={{ fontWeight: location.pathname === "/" ? "700" : "500", color: "#000" }}>
+        <Link
+          to="/"
+          style={{
+            fontWeight: location.pathname === "/" ? "700" : "500",
+            color: location.pathname === "/" ? "var(--primary-blue)" : "var(--text-primary)",
+            transition: "color 0.3s ease"
+          }}
+        >
           Trang chủ
         </Link>
 
-        {/* <Dropdown
-          menu={{ items: productMenuItems }}
-          trigger={['click']}
-          placement="bottom"
+        <Link
+          to="/material"
+          style={{
+            fontWeight: location.pathname === "/material" ? "700" : "500",
+            color: location.pathname === "/material" ? "var(--primary-blue)" : "var(--text-primary)",
+            transition: "color 0.3s ease"
+          }}
         >
-          <Text
-            style={{
-              cursor: "pointer",
-              fontWeight: isActiveMenu(productMenuItems.map(i => i.key)) ? "700" : "500",
-              color: "#000"
-            }}
-          >
-            Sản phẩm <DownOutlined />
-          </Text>
-        </Dropdown> */}
-
-        <Link to="/material" style={{ fontWeight: location.pathname === "/material" ? "700" : "500", color: "#000" }}>
           Vật tư
         </Link>
-
         <Dropdown menu={{ items: bomMenuItems }} trigger={['click']} placement="bottom">
           <Text
             style={{
               cursor: "pointer",
               fontWeight: isActiveMenu(bomMenuItems.map(i => i.key)) ? "700" : "500",
-              color: "#000"
+              color: isActiveMenu(bomMenuItems.map(i => i.key)) ? "var(--primary-blue)" : "var(--text-primary)",
+              transition: "color 0.3s ease"
             }}
           >
-            BOM <DownOutlined />
+            BOM <DownOutlined style={{ color: "var(--primary-blue)" }} />
           </Text>
         </Dropdown>
 
@@ -88,10 +89,11 @@ const HeaderComponent = () => {
             style={{
               cursor: "pointer",
               fontWeight: isActiveMenu(manufacturingMenuItems.map(i => i.key)) ? "700" : "500",
-              color: "#000"
+              color: isActiveMenu(manufacturingMenuItems.map(i => i.key)) ? "var(--primary-blue)" : "var(--text-primary)",
+              transition: "color 0.3s ease"
             }}
           >
-            Sản xuất <DownOutlined />
+            Sản xuất <DownOutlined style={{ color: "var(--primary-blue)" }} />
           </Text>
         </Dropdown>
 
@@ -100,24 +102,14 @@ const HeaderComponent = () => {
             style={{
               cursor: "pointer",
               fontWeight: isActiveMenu(inventoryMenuItems.map(i => i.key)) ? "700" : "500",
-              color: "#000"
+              color: isActiveMenu(inventoryMenuItems.map(i => i.key)) ? "var(--primary-blue)" : "var(--text-primary)",
+              transition: "color 0.3s ease"
             }}
           >
-            Kho hàng <DownOutlined />
+            Kho hàng <DownOutlined style={{ color: "var(--primary-blue)" }} />
           </Text>
         </Dropdown>
 
-        <Dropdown menu={{ items: costMenuItems }} trigger={['click']} placement="bottom">
-          <Text
-            style={{
-              cursor: "pointer",
-              fontWeight: isActiveMenu(costMenuItems.map(i => i.key)) ? "700" : "500",
-              color: "#000"
-            }}
-          >
-            Chi phí <DownOutlined />
-          </Text>
-        </Dropdown>
       </div>
     </Header>
   );
