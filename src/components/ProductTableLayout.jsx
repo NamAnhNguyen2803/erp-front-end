@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, Button, Input, Select, Tag, Space } from 'antd';
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
-
+import { STATUS,STATUS_LABELS } from '../constants/supplyType.enum';
 const { Option } = Select;
 
 const ProductTableLayout = ({

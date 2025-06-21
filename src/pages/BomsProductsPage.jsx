@@ -26,6 +26,7 @@ import {
   deleteBom,
 } from '../api/bomApi';
 import { getMaterials } from '../api/materials';
+import { getProducts } from '../api/products';
 import BomItemsTreeTable from '../components/BomItemsTreeTable';
 
 const { Search } = Input;
@@ -42,7 +43,7 @@ const BomsSemiProductsPage = () => {
   const [currentBomId, setCurrentBomId] = useState(null);
   const [originalBoms, setOriginalBoms] = useState([]);
   const [materials, setMaterials] = useState([]);
-
+  const [products, setProducts] = useState([]);
   const fetchBoms = async () => {
     setLoading(true);
     try {
@@ -80,6 +81,20 @@ const BomsSemiProductsPage = () => {
     };
 
     fetchMaterials();
+  }, []);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await getProducts(); // API trả về danh sách products
+        setProducts(Array.isArray(res.data) ? res.data : res.data.products || []);
+      } catch (err) {
+        message.error('Lỗi khi tải sản phẩm');
+        console.error(err);
+      }
+    };
+
+    fetchProducts();
   }, []);
 
   const handleSearch = (value) => {
@@ -198,7 +213,7 @@ const BomsSemiProductsPage = () => {
   ];
 
   return (
-    <div style={{ padding: 0}}>
+    <div style={{ padding: 0 }}>
       <Card>
         <div
           style={{
@@ -289,11 +304,25 @@ const BomsSemiProductsPage = () => {
         <Form layout="vertical" form={form} onFinish={handleCreateBom}>
           <Form.Item
             name="product_id"
-            label="ID sản phẩm"
+            label="Sản phẩm"
             rules={[{ required: true }]}
           >
-            <Input />
+            <Select
+              showSearch
+              placeholder="Chọn sản phẩm"
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option?.children?.toLowerCase().includes(input.toLowerCase())
+              }
+            >
+              {products.map(product => (
+                <Option key={product.product_id} value={product.product_id}>
+                  {product.code} - {product.name}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
+
           <Form.Item
             name="version"
             label="Phiên bản"
