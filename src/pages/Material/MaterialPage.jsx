@@ -8,15 +8,54 @@ import {
   DeleteOutlined,
   ExclamationCircleOutlined,
 } from '@ant-design/icons';
-
+import {
+  getMaterials,
+  createMaterial,
+  updateMaterial,
+  deleteMaterial,
+  getProducts,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  getSemiProducts,
+  createSemiProduct,
+  updateSemiProduct,
+  deleteSemiProduct,
+} from '@/api/materials'; // Đường dẫn tuỳ theo cấu trúc project của bạn
+import { STATUS, STATUS_LABELS } from '../../constants/supplyType.enum';
 const { Option } = Select;
 const { confirm } = Modal;
 
 const tabs = [
-  { label: 'Vật tư', key: 'materials', endpoint: '/api/v1/materials' },
-  { label: 'Bán thành phẩm', key: 'semi-finished-products', endpoint: '/api/v1/semi-finished-products' },
-  { label: 'Thành phẩm', key: 'products', endpoint: '/api/v1/products' },
+  {
+    label: 'Vật tư',
+    key: 'materials',
+    get: getMaterials,
+    create: createMaterial,
+    update: updateMaterial,
+    remove: deleteMaterial,
+    idField: 'material_id',
+  },
+  {
+    label: 'Bán thành phẩm',
+    key: 'semi-finished-products',
+    get: getSemiProducts,
+    create: createSemiProduct,
+    update: updateSemiProduct,
+    remove: deleteSemiProduct,
+    idField: 'semi_product_id',
+  },
+  {
+    label: 'Thành phẩm',
+    key: 'products',
+    get: getProducts,
+    create: createProduct,
+    update: updateProduct,
+    remove: deleteProduct,
+    idField: 'product_id',
+  },
 ];
+
 
 const MaterialManagementPage = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -31,38 +70,32 @@ const MaterialManagementPage = () => {
     setEditingItem(null);
     setModalVisible(true);
   };
+
   const fetchData = async () => {
     setLoading(true);
     try {
-      const endpoint = tabs[activeTab].endpoint;
-      const res = await axios.get(`http://localhost:3030${endpoint}`);
-
-      const keyMap = {
+      const tab = tabs[activeTab];
+      const res = await tab.get();
+      const dataKeyMap = {
         materials: 'materials',
         'semi-finished-products': 'semiProducts',
         products: 'products',
       };
 
-      const idFieldMap = {
-        materials: 'material_id',
-        'semi-finished-products': 'semi_product_id',
-        products: 'product_id',
-      };
-
-      const key = keyMap[tabs[activeTab].key];
-      const idField = idFieldMap[tabs[activeTab].key];
+      const key = dataKeyMap[tab.key];
       const rawData = res?.data?.[key] || [];
 
-      const cleanedData = rawData.map((item) => ({
-        ...item,
-        id: item[idField],
-      })).filter((item) => item.id && item.status === 'active');
+      const cleanedData = rawData
+        .map((item) => {
+          return { ...item, id: item[tab.idField] };
+        })
+        .filter((item) => item.id && item.status === 'active');
 
+      console.log('Fetched raw data:', rawData);
       setData(cleanedData);
-      setExistingCodes(cleanedData.map((item) => item.code)); // Lưu tất cả code
-
+      setExistingCodes(cleanedData.map((item) => item.code));
     } catch (err) {
-      console.error('Fetch error:', err.response || err.message || err);
+      console.error('Fetch error:', err);
       message.error('Lỗi khi tải dữ liệu');
       setData([]);
       setExistingCodes([]);
@@ -70,6 +103,7 @@ const MaterialManagementPage = () => {
       setLoading(false);
     }
   };
+
 
   useEffect(() => {
     // Prevent unnecessary fetches if activeTab hasn't changed
@@ -124,7 +158,7 @@ const MaterialManagementPage = () => {
               : item.id;
 
           // Gọi API xóa
-          await axios.put(`http://localhost:3030${endpoint}/${id}`, { status: 'inactive' });
+          await deleteProduct(item.id);
 
           message.success('Đã chuyển trạng thái sang "inactive"');
           fetchData(); // Load lại dữ liệu
@@ -138,25 +172,21 @@ const MaterialManagementPage = () => {
 
 
   const handleSubmit = async (values) => {
+    const tab = tabs[activeTab];
     try {
-      const endpoint = tabs[activeTab].endpoint;
-
       if (editingItem) {
-        const id =
-          tabs[activeTab].key === 'semi-finished-products'
-            ? editingItem.semi_product_id
-            : editingItem.id;
-        await axios.put(`http://localhost:3030${endpoint}/${id}`, values);
+        const id = editingItem[tab.idField];
+        await tab.update(id, values);
         message.success('Cập nhật thành công');
       } else {
-        await axios.post(`http://localhost:3030${endpoint}`, values);
+        await tab.create(values);
         message.success('Thêm mới thành công');
       }
 
       setModalVisible(false);
       fetchData();
     } catch (err) {
-      console.error('Submit error:', err.response || err);
+      console.error('Submit error:', err);
       message.error(`Lỗi khi lưu: ${err.response?.data?.message || err.message}`);
     }
   };
@@ -169,11 +199,13 @@ const MaterialManagementPage = () => {
     {
       title: 'Trạng thái',
       dataIndex: 'status',
-      render: (status) => (
-        <Tag color={status === 'active' ? 'green' : 'default'}>
-          {status || 'unknown'}
-        </Tag>
-      ),
+      render: (status) => {
+        const label = STATUS_LABELS[status] || 'Không rõ';
+        const color = status === STATUS.ACTIVE ? 'green' : 'red';
+
+        return <Tag color={color}>{label}</Tag>;
+
+      },
     },
     {
       title: 'Hành động',
@@ -191,19 +223,19 @@ const MaterialManagementPage = () => {
         </Space>
       ),
     },
-    
+
   ];
 
   return (
     <Spin spinning={loading} tip="Loading...">
       <ProductTableLayout
-        title="Quản lý vật tư, bán thành phẩm, thành phẩm"
+        title="Quản lý vật tư"
         tabs={tabs.map((t) => t.label)}
         activeTab={activeTab}
         onTabChange={(i) => setActiveTab(i)}
         searchPlaceholder="Tìm kiếm..."
         showAddButton={true}
-        onAddClick={handleAddClick} // Ensure this matches ProductTableLayout's prop
+        onAddClick={handleAddClick}
         columns={columns}
         data={data}
       />
@@ -214,7 +246,9 @@ const MaterialManagementPage = () => {
         onOk={() => form.submit()}
         okText={editingItem ? 'Lưu' : 'Thêm'}
       >
-        <Form form={form} layout="vertical" onFinish={handleSubmit}>
+        <Form form={form} layout="vertical" onFinish={handleSubmit} initialValues={{
+          status: 'active',
+        }}>
           <Form.Item
             name="code"
             label="Mã"
@@ -244,10 +278,22 @@ const MaterialManagementPage = () => {
           <Form.Item name="unit" label="Đơn vị" rules={[{ required: true, message: 'Vui lòng nhập đơn vị' }]}>
             <Input />
           </Form.Item>
-          <Form.Item name="status" label="Trạng thái" rules={[{ required: true, message: 'Vui lòng chọn trạng thái' }]}>
+          <Form.Item name="specification" label="Thông số kĩ thuật" rules={[{ required: false }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="unit_price" label="Giá trị" rules={[{ required: false }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="supplier" label="Nhà cung cấp" rules={[{ required: false }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="status" label="Trạng thái" rules={[{ required: false, message: 'Vui lòng chọn trạng thái' }]}>
             <Select>
-              <Option value="active">Hoạt động</Option>
-              <Option value="inactive">Ngừng hoạt động</Option>
+              {Object.entries(STATUS_LABELS).map(([value, label]) => (
+                <Option key={value} value={value}>
+                  {label}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
         </Form>

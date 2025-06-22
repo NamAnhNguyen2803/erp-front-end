@@ -9,4 +9,4 @@ export const transactionTypeMap: Record<string, string> = {
     product: "Thành phẩm",
     semi_product: "Bán thành phẩm",
   };
-  
+
