@@ -1,0 +1,56 @@
+"filename", "language", "PostCSS", "JavaScript JSX", "TypeScript JSX", "TypeScript", "XML", "JavaScript", "comment", "blank", "total"
+"d:\document\project\finale\erp-front-end\src\App.css", "PostCSS", 35, 0, 0, 0, 0, 0, 0, 6, 41
+"d:\document\project\finale\erp-front-end\src\App.jsx", "JavaScript JSX", 0, 12, 0, 0, 0, 0, 0, 3, 15
+"d:\document\project\finale\erp-front-end\src\api\auth.js", "JavaScript", 0, 0, 0, 0, 0, 3, 0, 1, 4
+"d:\document\project\finale\erp-front-end\src\api\bomApi.js", "JavaScript", 0, 0, 0, 0, 0, 20, 0, 6, 26
+"d:\document\project\finale\erp-front-end\src\api\boms.js", "JavaScript", 0, 0, 0, 0, 0, 7, 5, 6, 18
+"d:\document\project\finale\erp-front-end\src\api\inventory.js", "JavaScript", 0, 0, 0, 0, 0, 19, 5, 7, 31
+"d:\document\project\finale\erp-front-end\src\api\manufacturing.js", "JavaScript", 0, 0, 0, 0, 0, 36, 1, 8, 45
+"d:\document\project\finale\erp-front-end\src\api\materials.js", "JavaScript", 0, 0, 0, 0, 0, 14, 0, 4, 18
+"d:\document\project\finale\erp-front-end\src\api\products.js", "JavaScript", 0, 0, 0, 0, 0, 6, 0, 2, 8
+"d:\document\project\finale\erp-front-end\src\api\reports.js", "JavaScript", 0, 0, 0, 0, 0, 3, 0, 1, 4
+"d:\document\project\finale\erp-front-end\src\api\semiProducts.js", "JavaScript", 0, 0, 0, 0, 0, 5, 0, 1, 6
+"d:\document\project\finale\erp-front-end\src\api\users.js", "JavaScript", 0, 0, 0, 0, 0, 8, 0, 1, 9
+"d:\document\project\finale\erp-front-end\src\assets\react.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\document\project\finale\erp-front-end\src\components\BomItemsTable.jsx", "JavaScript JSX", 0, 53, 0, 0, 0, 0, 0, 6, 59
+"d:\document\project\finale\erp-front-end\src\components\BomItemsTreeTable.jsx", "JavaScript JSX", 0, 21, 0, 0, 0, 0, 0, 5, 26
+"d:\document\project\finale\erp-front-end\src\components\Header.jsx", "JavaScript JSX", 0, 101, 0, 0, 0, 0, 2, 16, 119
+"d:\document\project\finale\erp-front-end\src\components\ProductTableLayout.jsx", "JavaScript JSX", 0, 69, 0, 0, 0, 0, 3, 7, 79
+"d:\document\project\finale\erp-front-end\src\components\Sidebar.jsx", "JavaScript JSX", 0, 44, 0, 0, 0, 0, 0, 3, 47
+"d:\document\project\finale\erp-front-end\src\components\ThemeButton.jsx", "JavaScript JSX", 0, 60, 0, 0, 0, 0, 0, 5, 65
+"d:\document\project\finale\erp-front-end\src\components\ThemeSelector.jsx", "JavaScript JSX", 0, 55, 0, 0, 0, 0, 0, 5, 60
+"d:\document\project\finale\erp-front-end\src\components\WorkOrderForm.jsx", "JavaScript JSX", 0, 90, 0, 0, 0, 0, 1, 15, 106
+"d:\document\project\finale\erp-front-end\src\components\WorkOrderList.jsx", "JavaScript JSX", 0, 312, 0, 0, 0, 0, 3, 22, 337
+"d:\document\project\finale\erp-front-end\src\constants\transactionType.enum.ts", "TypeScript", 0, 0, 0, 10, 0, 0, 0, 2, 12
+"d:\document\project\finale\erp-front-end\src\contexts\ThemeContext.jsx", "JavaScript JSX", 0, 59, 0, 0, 0, 0, 0, 6, 65
+"d:\document\project\finale\erp-front-end\src\index.css", "PostCSS", 78, 0, 0, 0, 0, 0, 2, 9, 89
+"d:\document\project\finale\erp-front-end\src\layouts\AppLayout.jsx", "JavaScript JSX", 0, 32, 0, 0, 0, 0, 0, 4, 36
+"d:\document\project\finale\erp-front-end\src\layouts\InventoryLayout.jsx", "JavaScript JSX", 0, 71, 0, 0, 0, 0, 6, 7, 84
+"d:\document\project\finale\erp-front-end\src\layouts\ManufacturingLayout.jsx", "JavaScript JSX", 0, 67, 0, 0, 0, 0, 3, 6, 76
+"d:\document\project\finale\erp-front-end\src\main.jsx", "JavaScript JSX", 0, 13, 0, 0, 0, 0, 0, 2, 15
+"d:\document\project\finale\erp-front-end\src\pages\BomsProductsPage.jsx", "JavaScript JSX", 0, 301, 0, 0, 0, 0, 2, 23, 326
+"d:\document\project\finale\erp-front-end\src\pages\BomsSemiProductsPage.jsx", "JavaScript JSX", 0, 294, 0, 0, 0, 0, 0, 19, 313
+"d:\document\project\finale\erp-front-end\src\pages\DashboardPage.jsx", "JavaScript JSX", 0, 41, 0, 0, 0, 0, 1, 5, 47
+"d:\document\project\finale\erp-front-end\src\pages\Inventory\InventoryHistoryPage.jsx", "JavaScript JSX", 0, 7, 0, 0, 0, 0, 0, 0, 7
+"d:\document\project\finale\erp-front-end\src\pages\Inventory\InventoryStockPage.jsx", "JavaScript JSX", 0, 96, 0, 0, 0, 0, 0, 10, 106
+"d:\document\project\finale\erp-front-end\src\pages\Inventory\InventoryTransactionForm.tsx", "TypeScript JSX", 0, 0, 208, 0, 0, 0, 10, 23, 241
+"d:\document\project\finale\erp-front-end\src\pages\Inventory\InventoryTransactionsPage.jsx", "JavaScript JSX", 0, 237, 0, 0, 0, 0, 0, 22, 259
+"d:\document\project\finale\erp-front-end\src\pages\Inventory\InventoryWarehousesPage.jsx", "JavaScript JSX", 0, 219, 0, 0, 0, 0, 7, 18, 244
+"d:\document\project\finale\erp-front-end\src\pages\ManufacturingStepsPage.jsx", "JavaScript JSX", 0, 63, 0, 0, 0, 0, 0, 4, 67
+"d:\document\project\finale\erp-front-end\src\pages\Manufacturing\Manufacturing Order\ManufacturingOrderDetailPage.jsx", "JavaScript JSX", 0, 233, 0, 0, 0, 0, 8, 16, 257
+"d:\document\project\finale\erp-front-end\src\pages\Manufacturing\Manufacturing Order\ManufacturingOrdersPage.jsx", "JavaScript JSX", 0, 115, 0, 0, 0, 0, 0, 9, 124
+"d:\document\project\finale\erp-front-end\src\pages\Manufacturing\Manufacturing Plan\ManufacturingPlanDetailPage.jsx", "JavaScript JSX", 0, 367, 0, 0, 0, 0, 11, 25, 403
+"d:\document\project\finale\erp-front-end\src\pages\Manufacturing\Manufacturing Plan\ManufacturingPlansPage.jsx", "JavaScript JSX", 0, 81, 0, 0, 0, 0, 1, 7, 89
+"d:\document\project\finale\erp-front-end\src\pages\Manufacturing\Work Order\ManufacturingWorkOrderDetailPage.jsx", "JavaScript JSX", 0, 368, 0, 0, 0, 0, 10, 44, 422
+"d:\document\project\finale\erp-front-end\src\pages\Manufacturing\Work Order\ManufacturingWorkOrdersPage.jsx", "JavaScript JSX", 0, 158, 0, 0, 0, 0, 2, 9, 169
+"d:\document\project\finale\erp-front-end\src\pages\Manufacturing\Work Order\components\MaterialRequirementsTable.jsx", "JavaScript JSX", 0, 328, 0, 0, 0, 0, 10, 22, 360
+"d:\document\project\finale\erp-front-end\src\pages\Material\MaterialPage.jsx", "JavaScript JSX", 0, 228, 0, 0, 0, 0, 3, 28, 259
+"d:\document\project\finale\erp-front-end\src\pages\ProductsFinishedPage.jsx", "JavaScript JSX", 0, 63, 0, 0, 0, 0, 0, 4, 67
+"d:\document\project\finale\erp-front-end\src\pages\ProductsMaterialsPage.jsx", "JavaScript JSX", 0, 7, 0, 0, 0, 0, 0, 0, 7
+"d:\document\project\finale\erp-front-end\src\pages\ProductsSemiPage.jsx", "JavaScript JSX", 0, 63, 0, 0, 0, 0, 0, 4, 67
+"d:\document\project\finale\erp-front-end\src\pages\ReportsInventoryPage.jsx", "JavaScript JSX", 0, 49, 0, 0, 0, 0, 0, 4, 53
+"d:\document\project\finale\erp-front-end\src\pages\ReportsProductionPage.jsx", "JavaScript JSX", 0, 49, 0, 0, 0, 0, 0, 4, 53
+"d:\document\project\finale\erp-front-end\src\pages\UsersPage.jsx", "JavaScript JSX", 0, 63, 0, 0, 0, 0, 0, 4, 67
+"d:\document\project\finale\erp-front-end\src\routes\index.jsx", "JavaScript JSX", 0, 56, 0, 0, 0, 0, 0, 1, 57
+"d:\document\project\finale\erp-front-end\src\styles\colors.css", "PostCSS", 29, 0, 0, 0, 0, 0, 8, 6, 43
+"Total", "-", 142, 4545, 208, 10, 1, 121, 104, 477, 5608

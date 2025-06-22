@@ -1,0 +1,102 @@
+Date : 2025-06-16 08:03:23
+Directory : d:\document\project\finale\erp-front-end\src
+Total : 54 files,  5027 codes, 104 comments, 477 blanks, all 5608 lines
+
+Languages
++----------------+------------+------------+------------+------------+------------+
+| language       | files      | code       | comment    | blank      | total      |
++----------------+------------+------------+------------+------------+------------+
+| JavaScript JSX |         38 |      4,545 |         73 |        394 |      5,012 |
+| TypeScript JSX |          1 |        208 |         10 |         23 |        241 |
+| PostCSS        |          3 |        142 |         10 |         21 |        173 |
+| JavaScript     |         10 |        121 |         11 |         37 |        169 |
+| TypeScript     |          1 |         10 |          0 |          2 |         12 |
+| XML            |          1 |          1 |          0 |          0 |          1 |
++----------------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                  | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                     |         54 |      5,027 |        104 |        477 |      5,608 |
+| . (Files)                                                                                                             |          4 |        138 |          2 |         20 |        160 |
+| api                                                                                                                   |         10 |        121 |         11 |         37 |        169 |
+| assets                                                                                                                |          1 |          1 |          0 |          0 |          1 |
+| components                                                                                                            |          9 |        805 |          9 |         84 |        898 |
+| constants                                                                                                             |          1 |         10 |          0 |          2 |         12 |
+| contexts                                                                                                              |          1 |         59 |          0 |          6 |         65 |
+| layouts                                                                                                               |          3 |        170 |          9 |         17 |        196 |
+| pages                                                                                                                 |         23 |      3,638 |         65 |        304 |      4,007 |
+| pages (Files)                                                                                                         |         10 |        993 |          3 |         71 |      1,067 |
+| pages\Inventory                                                                                                       |          5 |        767 |         17 |         73 |        857 |
+| pages\Manufacturing                                                                                                   |          7 |      1,650 |         42 |        132 |      1,824 |
+| pages\Manufacturing\Manufacturing Order                                                                               |          2 |        348 |          8 |         25 |        381 |
+| pages\Manufacturing\Manufacturing Plan                                                                                |          2 |        448 |         12 |         32 |        492 |
+| pages\Manufacturing\Work Order                                                                                        |          3 |        854 |         22 |         75 |        951 |
+| pages\Manufacturing\Work Order (Files)                                                                                |          2 |        526 |         12 |         53 |        591 |
+| pages\Manufacturing\Work Order\components                                                                             |          1 |        328 |         10 |         22 |        360 |
+| pages\Material                                                                                                        |          1 |        228 |          3 |         28 |        259 |
+| routes                                                                                                                |          1 |         56 |          0 |          1 |         57 |
+| styles                                                                                                                |          1 |         29 |          8 |          6 |         43 |
++-----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| filename                                                                                                              | language       | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| d:\document\project\finale\erp-front-end\src\App.css                                                                  | PostCSS        |         35 |          0 |          6 |         41 |
+| d:\document\project\finale\erp-front-end\src\App.jsx                                                                  | JavaScript JSX |         12 |          0 |          3 |         15 |
+| d:\document\project\finale\erp-front-end\src\api\auth.js                                                              | JavaScript     |          3 |          0 |          1 |          4 |
+| d:\document\project\finale\erp-front-end\src\api\bomApi.js                                                            | JavaScript     |         20 |          0 |          6 |         26 |
+| d:\document\project\finale\erp-front-end\src\api\boms.js                                                              | JavaScript     |          7 |          5 |          6 |         18 |
+| d:\document\project\finale\erp-front-end\src\api\inventory.js                                                         | JavaScript     |         19 |          5 |          7 |         31 |
+| d:\document\project\finale\erp-front-end\src\api\manufacturing.js                                                     | JavaScript     |         36 |          1 |          8 |         45 |
+| d:\document\project\finale\erp-front-end\src\api\materials.js                                                         | JavaScript     |         14 |          0 |          4 |         18 |
+| d:\document\project\finale\erp-front-end\src\api\products.js                                                          | JavaScript     |          6 |          0 |          2 |          8 |
+| d:\document\project\finale\erp-front-end\src\api\reports.js                                                           | JavaScript     |          3 |          0 |          1 |          4 |
+| d:\document\project\finale\erp-front-end\src\api\semiProducts.js                                                      | JavaScript     |          5 |          0 |          1 |          6 |
+| d:\document\project\finale\erp-front-end\src\api\users.js                                                             | JavaScript     |          8 |          0 |          1 |          9 |
+| d:\document\project\finale\erp-front-end\src\assets\react.svg                                                         | XML            |          1 |          0 |          0 |          1 |
+| d:\document\project\finale\erp-front-end\src\components\BomItemsTable.jsx                                             | JavaScript JSX |         53 |          0 |          6 |         59 |
+| d:\document\project\finale\erp-front-end\src\components\BomItemsTreeTable.jsx                                         | JavaScript JSX |         21 |          0 |          5 |         26 |
+| d:\document\project\finale\erp-front-end\src\components\Header.jsx                                                    | JavaScript JSX |        101 |          2 |         16 |        119 |
+| d:\document\project\finale\erp-front-end\src\components\ProductTableLayout.jsx                                        | JavaScript JSX |         69 |          3 |          7 |         79 |
+| d:\document\project\finale\erp-front-end\src\components\Sidebar.jsx                                                   | JavaScript JSX |         44 |          0 |          3 |         47 |
+| d:\document\project\finale\erp-front-end\src\components\ThemeButton.jsx                                               | JavaScript JSX |         60 |          0 |          5 |         65 |
+| d:\document\project\finale\erp-front-end\src\components\ThemeSelector.jsx                                             | JavaScript JSX |         55 |          0 |          5 |         60 |
+| d:\document\project\finale\erp-front-end\src\components\WorkOrderForm.jsx                                             | JavaScript JSX |         90 |          1 |         15 |        106 |
+| d:\document\project\finale\erp-front-end\src\components\WorkOrderList.jsx                                             | JavaScript JSX |        312 |          3 |         22 |        337 |
+| d:\document\project\finale\erp-front-end\src\constants\transactionType.enum.ts                                        | TypeScript     |         10 |          0 |          2 |         12 |
+| d:\document\project\finale\erp-front-end\src\contexts\ThemeContext.jsx                                                | JavaScript JSX |         59 |          0 |          6 |         65 |
+| d:\document\project\finale\erp-front-end\src\index.css                                                                | PostCSS        |         78 |          2 |          9 |         89 |
+| d:\document\project\finale\erp-front-end\src\layouts\AppLayout.jsx                                                    | JavaScript JSX |         32 |          0 |          4 |         36 |
+| d:\document\project\finale\erp-front-end\src\layouts\InventoryLayout.jsx                                              | JavaScript JSX |         71 |          6 |          7 |         84 |
+| d:\document\project\finale\erp-front-end\src\layouts\ManufacturingLayout.jsx                                          | JavaScript JSX |         67 |          3 |          6 |         76 |
+| d:\document\project\finale\erp-front-end\src\main.jsx                                                                 | JavaScript JSX |         13 |          0 |          2 |         15 |
+| d:\document\project\finale\erp-front-end\src\pages\BomsProductsPage.jsx                                               | JavaScript JSX |        301 |          2 |         23 |        326 |
+| d:\document\project\finale\erp-front-end\src\pages\BomsSemiProductsPage.jsx                                           | JavaScript JSX |        294 |          0 |         19 |        313 |
+| d:\document\project\finale\erp-front-end\src\pages\DashboardPage.jsx                                                  | JavaScript JSX |         41 |          1 |          5 |         47 |
+| d:\document\project\finale\erp-front-end\src\pages\Inventory\InventoryHistoryPage.jsx                                 | JavaScript JSX |          7 |          0 |          0 |          7 |
+| d:\document\project\finale\erp-front-end\src\pages\Inventory\InventoryStockPage.jsx                                   | JavaScript JSX |         96 |          0 |         10 |        106 |
+| d:\document\project\finale\erp-front-end\src\pages\Inventory\InventoryTransactionForm.tsx                             | TypeScript JSX |        208 |         10 |         23 |        241 |
+| d:\document\project\finale\erp-front-end\src\pages\Inventory\InventoryTransactionsPage.jsx                            | JavaScript JSX |        237 |          0 |         22 |        259 |
+| d:\document\project\finale\erp-front-end\src\pages\Inventory\InventoryWarehousesPage.jsx                              | JavaScript JSX |        219 |          7 |         18 |        244 |
+| d:\document\project\finale\erp-front-end\src\pages\ManufacturingStepsPage.jsx                                         | JavaScript JSX |         63 |          0 |          4 |         67 |
+| d:\document\project\finale\erp-front-end\src\pages\Manufacturing\Manufacturing Order\ManufacturingOrderDetailPage.jsx | JavaScript JSX |        233 |          8 |         16 |        257 |
+| d:\document\project\finale\erp-front-end\src\pages\Manufacturing\Manufacturing Order\ManufacturingOrdersPage.jsx      | JavaScript JSX |        115 |          0 |          9 |        124 |
+| d:\document\project\finale\erp-front-end\src\pages\Manufacturing\Manufacturing Plan\ManufacturingPlanDetailPage.jsx   | JavaScript JSX |        367 |         11 |         25 |        403 |
+| d:\document\project\finale\erp-front-end\src\pages\Manufacturing\Manufacturing Plan\ManufacturingPlansPage.jsx        | JavaScript JSX |         81 |          1 |          7 |         89 |
+| d:\document\project\finale\erp-front-end\src\pages\Manufacturing\Work Order\ManufacturingWorkOrderDetailPage.jsx      | JavaScript JSX |        368 |         10 |         44 |        422 |
+| d:\document\project\finale\erp-front-end\src\pages\Manufacturing\Work Order\ManufacturingWorkOrdersPage.jsx           | JavaScript JSX |        158 |          2 |          9 |        169 |
+| d:\document\project\finale\erp-front-end\src\pages\Manufacturing\Work Order\components\MaterialRequirementsTable.jsx  | JavaScript JSX |        328 |         10 |         22 |        360 |
+| d:\document\project\finale\erp-front-end\src\pages\Material\MaterialPage.jsx                                          | JavaScript JSX |        228 |          3 |         28 |        259 |
+| d:\document\project\finale\erp-front-end\src\pages\ProductsFinishedPage.jsx                                           | JavaScript JSX |         63 |          0 |          4 |         67 |
+| d:\document\project\finale\erp-front-end\src\pages\ProductsMaterialsPage.jsx                                          | JavaScript JSX |          7 |          0 |          0 |          7 |
+| d:\document\project\finale\erp-front-end\src\pages\ProductsSemiPage.jsx                                               | JavaScript JSX |         63 |          0 |          4 |         67 |
+| d:\document\project\finale\erp-front-end\src\pages\ReportsInventoryPage.jsx                                           | JavaScript JSX |         49 |          0 |          4 |         53 |
+| d:\document\project\finale\erp-front-end\src\pages\ReportsProductionPage.jsx                                          | JavaScript JSX |         49 |          0 |          4 |         53 |
+| d:\document\project\finale\erp-front-end\src\pages\UsersPage.jsx                                                      | JavaScript JSX |         63 |          0 |          4 |         67 |
+| d:\document\project\finale\erp-front-end\src\routes\index.jsx                                                         | JavaScript JSX |         56 |          0 |          1 |         57 |
+| d:\document\project\finale\erp-front-end\src\styles\colors.css                                                        | PostCSS        |         29 |          8 |          6 |         43 |
+| Total                                                                                                                 |                |      5,027 |        104 |        477 |      5,608 |
++-----------------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
