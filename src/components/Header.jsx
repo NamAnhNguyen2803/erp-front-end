@@ -11,9 +11,10 @@ const HeaderComponent = () => {
 
   // Tạo menu chuẩn antd 5, dùng items thay vì array objects tự định nghĩa
   const productMenuItems = [
-    { key: "/products/finished", label: <Link to="/products/finished">Sản phẩm hoàn chỉnh</Link> },
-    { key: "/products/semi", label: <Link to="/products/semi">Sản phẩm bán thành phẩm</Link> },
-    { key: "/products/materials", label: <Link to="/products/materials">Nguyên vật liệu</Link> },
+    { key: "/supply/materials", label: <Link to="/supply/materials">Nguyên liệu</Link> },
+    { key: "/supply/semi-products", label: <Link to="/supply/semi-products">Bán thành phẩm</Link> },
+    { key: "/supply/products", label: <Link to="/supply/products">Thành phẩm</Link> },
+
   ];
 
 
@@ -61,16 +62,19 @@ const HeaderComponent = () => {
           Trang chủ
         </Link>
 
-        <Link
-          to="/material"
-          style={{
-            fontWeight: location.pathname === "/material" ? "700" : "500",
-            color: location.pathname === "/material" ? "var(--primary-blue)" : "var(--text-primary)",
-            transition: "color 0.3s ease"
-          }}
-        >
-          Vật tư
-        </Link>
+        <Dropdown menu={{ items: productMenuItems }} trigger={['click']} placement="bottom">
+          <Text
+            style={{
+              cursor: "pointer",
+              fontWeight: isActiveMenu(productMenuItems.map(i => i.key)) ? "700" : "500",
+              color: isActiveMenu(productMenuItems.map(i => i.key)) ? "var(--primary-blue)" : "var(--text-primary)",
+              transition: "color 0.3s ease"
+            }}
+          >
+            Vật tư <DownOutlined style={{ color: "var(--primary-blue)" }} />
+          </Text>
+        </Dropdown>
+
         <Dropdown menu={{ items: bomMenuItems }} trigger={['click']} placement="bottom">
           <Text
             style={{

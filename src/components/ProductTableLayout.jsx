@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, Button, Input, Select, Tag, Space } from 'antd';
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
-import { STATUS,STATUS_LABELS } from '../constants/supplyType.enum';
+import { STATUS, STATUS_LABELS } from '../constants/supplyType.enum';
 const { Option } = Select;
 
 const ProductTableLayout = ({
@@ -18,31 +18,15 @@ const ProductTableLayout = ({
   pagination = { pageSize: 10 },
 }) => {
   return (
-    <div style={{ padding: 12, border:'4px' }}>
+    <div style={{ padding: 12, border: '4px' }}>
       {/* Header + Tabs */}
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 24 }}>
         <div>
           <h1 style={{ marginBottom: 0, marginTop: 0 }}>{title}</h1>
-          <div style={{ marginTop: 8 }}>
-            {tabs.map((tab, index) => (
-              <Button
-                key={index}
-                type="text"
-                style={{
-                  fontWeight: activeTab === index ? 'bold' : 'normal',
-                  borderBottom: activeTab === index ? '2px solid black' : 'none',
-                  marginRight: 16,
-                }}
-                onClick={() => onTabChange?.(index)}
-              >
-                {tab}
-              </Button>
-            ))}
-          </div>
         </div>
         {showAddButton && (
-          <Button  icon={<PlusOutlined />} onClick={onAddClick}>
-            Thêm 
+          <Button icon={<PlusOutlined />} onClick={onAddClick}>
+            Thêm
           </Button>
         )}
       </div>

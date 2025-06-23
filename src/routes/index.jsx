@@ -18,10 +18,12 @@ import BomsSemiProductsPage from '../pages/BomsSemiProductsPage';
 import UsersPage from '../pages/UsersPage';
 import ReportsProductionPage from '../pages/ReportsProductionPage';
 import ReportsInventoryPage from '../pages/ReportsInventoryPage';
-import MaterialPage from '../pages/Material/MaterialPage';
 import ManufacturingOrderDetailPage from '../pages/Manufacturing/Manufacturing Order/ManufacturingOrderDetailPage';
 import ManufacturingPlanDetailPage from '../pages/Manufacturing/Manufacturing Plan/ManufacturingPlanDetailPage';
 import ManufacturingWorkOrderDetailPage from '../pages/Manufacturing/Work Order/ManufacturingWorkOrderDetailPage';
+import MaterialPage from '../pages/Supply/MaterialPage';
+import SemiProductPage from '../pages/Supply/SemiProductPage';
+import ProductPage from '../pages/Supply/ProductPage';
 const AppRoutes = () => {
   return (
     <Routes>
@@ -37,6 +39,10 @@ const AppRoutes = () => {
         <Route path="inventory/stock" element={<InventoryStockPage />} />
         <Route path="inventory/transactions" element={<InventoryTransactionsPage />} />
         <Route path="inventory/history" element={<InventoryHistoryPage />} />
+        <Route path="supply/products" element={<ProductPage />} />
+        <Route path="supply/materials" element={<MaterialPage />} />
+        <Route path="supply/semi-products" element={<SemiProductPage />} />
+        <Route path="material" element={<MaterialPage />} />
         <Route path="material" element={<MaterialPage />} />
         <Route path="/manufacturing-orders" element={<ManufacturingOrdersPage />} />
         <Route path="/manufacturing-orders/:id" element={<ManufacturingOrderDetailPage />} />

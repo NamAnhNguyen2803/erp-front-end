@@ -129,6 +129,9 @@ const MaterialManagementPage = () => {
       code: item.code,
       name: item.name,
       unit: item.unit,
+      specification: item.specification,
+      unit_price: item.unit_price,
+      supplier: item.supplier,
       status: item.status || 'active',
     });
     setModalVisible(true);
@@ -195,7 +198,7 @@ const MaterialManagementPage = () => {
     { title: 'ID', dataIndex: 'id' },
     { title: 'Mã', dataIndex: 'code' },
     { title: 'Tên', dataIndex: 'name' },
-    { title: 'Đơn vị', dataIndex: 'unit' },
+    { title: 'Đơn vị', dataIndex: 'unit' }, 
     {
       title: 'Trạng thái',
       dataIndex: 'status',
