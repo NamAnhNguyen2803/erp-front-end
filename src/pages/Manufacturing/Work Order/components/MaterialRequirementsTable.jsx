@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, InputNumber, message, Typography, Tag, Card, Row, Col, Radio } from 'antd';
+import { MANUFACTURING_ORDER_STATUS_LABELS, MANUFACTURING_ORDER_STATUS_COLORS } from '@/constants/manufacturingStatus.enum';
 import { PlusOutlined, SwapOutlined } from '@ant-design/icons';
 import { transferGoods, importGoods } from '../../../../api/inventory';
 
@@ -163,13 +164,13 @@ const MaterialRequirementsTable = ({
         const inTotal = record.total_stock;
 
         if (inProduction >= required) {
-          return <Tag color="green">Đủ (SX)</Tag>;
+          return <Tag color={MANUFACTURING_ORDER_STATUS_COLORS.FINISHED}>Đủ (SX)</Tag>;
         } else if (inTotal >= required) {
-          return <Tag color="orange">Đủ (tổng), thiếu SX</Tag>;
+          return <Tag color={MANUFACTURING_ORDER_STATUS_COLORS.ACTIVE}>Đủ (tổng), thiếu SX</Tag>;
         } else if (inTotal > 0) {
-          return <Tag color="warning">Thiếu {(required - inTotal).toLocaleString()}</Tag>;
+          return <Tag color={MANUFACTURING_ORDER_STATUS_COLORS.PENDING}>Thiếu {(required - inTotal).toLocaleString()}</Tag>;
         } else {
-          return <Tag color="red">Chưa có</Tag>;
+          return <Tag color={MANUFACTURING_ORDER_STATUS_COLORS.CANCELLED}>Chưa có</Tag>;
         }
       },
     },

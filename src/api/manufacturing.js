@@ -14,6 +14,8 @@ export const createOrder = (data) => axios.post(`${API_URL}/orders`, data);
 export const updateOrder = (id, data) => axios.put(`${API_URL}/orders/${id}`, data);
 export const deleteOrder = (id) => axios.delete(`${API_URL}/orders/${id}`);
 export const approveOrder = (id) => axios.patch(`${API_URL}/orders/${id}/approve`);
+export const completeManufacturingOrder = (id, data) => axios.patch(`${API_URL}/orders/${id}/complete`, data);
+export const cancelManufacturingOrder = (id) => axios.patch(`${API_URL}/orders/${id}/cancel`);
 
 
 export const getAllOrdersDetails = () => axios.get(`${API_URL}/order-details`);

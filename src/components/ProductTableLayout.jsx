@@ -6,14 +6,12 @@ const { Option } = Select;
 
 const ProductTableLayout = ({
   title = 'Product Management',
-  tabs = ['Finished Goods', 'Semi-Finished Goods', 'Materials'],
-  activeTab = 0,
-  onTabChange,
   searchPlaceholder = 'Search',
   showAddButton = true,
   onAddClick,
   columns,
   data,
+  onRow ,
   filters = [],
   pagination = { pageSize: 10 },
 }) => {
@@ -54,6 +52,7 @@ const ProductTableLayout = ({
         dataSource={data}
         pagination={{ position: ['bottomCenter'], ...pagination }}
         rowKey="id"
+        onRow={onRow}
       />
     </div>
   );

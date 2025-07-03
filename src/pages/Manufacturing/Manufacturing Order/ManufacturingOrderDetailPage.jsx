@@ -5,24 +5,12 @@ import { getOrderByOrderId, getWorkOrderDetail } from '@/api/manufacturing';
 import { Breadcrumb } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import WorkOrderList from '@/components/WorkOrderList';
-const statusColors = {
-  pending: 'blue',
-  active: 'cyan',
-  finished: 'green',
-  cancelled: 'red',
-  'Đang làm': 'blue',
-  'Chưa làm': 'default',
-};
-const statusLabels = {
-  pending: 'Chờ thực hiện',
-  active: 'Đang thực hiện',
-  finished: 'Hoàn thành',
-  cancelled: 'Đã hủy',
-};
+import { Space } from 'antd';
+import { MANUFACTURING_ORDER_STATUS_COLORS, MANUFACTURING_ORDER_STATUS_LABELS } from '@/constants/manufacturingStatus.enum';
 
 const stepColumns = [
   { title: 'Bước', dataIndex: 'name', key: 'name' },
-  { title: 'Trạng thái', dataIndex: 'status', key: 'status', render: (text) => <Tag color={statusColors[text] || 'default'}>{statusLabels[text] || text}</Tag> },
+  { title: 'Trạng thái', dataIndex: 'status', key: 'status', render: (text) => <Tag color={MANUFACTURING_ORDER_STATUS_COLORS[text] || 'default'}>{MANUFACTURING_ORDER_STATUS_LABELS[text] || text}</Tag> },
   { title: 'Bắt đầu', dataIndex: 'start', key: 'start' },
   { title: 'Kết thúc', dataIndex: 'end', key: 'end' },
   { title: 'Người thực hiện', dataIndex: 'operator', key: 'operator' },
@@ -31,7 +19,7 @@ const stepColumns = [
 const workOrderColumns = [
   { title: 'Mã WO', dataIndex: 'code', key: 'code' },
   { title: 'Tên', dataIndex: 'name', key: 'name' },
-  { title: 'Trạng thái', dataIndex: 'status', key: 'status', render: (text) => <Tag color={statusColors[text] || 'default'}>{statusLabels[text] || text}</Tag> },
+  { title: 'Trạng thái', dataIndex: 'status', key: 'status', render: (text) => <Tag color={MANUFACTURING_ORDER_STATUS_COLORS[text] || 'default'}>{MANUFACTURING_ORDER_STATUS_LABELS[text] || text}</Tag> },
   { title: 'Người thực hiện', dataIndex: 'operator', key: 'operator' },
 ];
 
@@ -122,7 +110,7 @@ const ManufacturingOrderDetailPage = () => {
   const workOrderColumnsFull = [
     { title: 'Mã WO', dataIndex: 'order_number', key: 'order_number' },
     { title: 'Tên', dataIndex: 'name', key: 'name' },
-    { title: 'Trạng thái', dataIndex: 'status', key: 'status', render: (text) => <Tag color={statusColors[text] || 'default'}>{statusLabels[text] || text}</Tag> },
+    { title: 'Trạng thái', dataIndex: 'status', key: 'status', render: (text) => <Tag color={MANUFACTURING_ORDER_STATUS_COLORS[text] || 'default'}>{MANUFACTURING_ORDER_STATUS_LABELS[text] || text}</Tag> },
     { title: 'Người thực hiện', dataIndex: 'operator', key: 'operator' },
     { title: 'Ngày bắt đầu', dataIndex: 'start_date', key: 'start_date', render: (text) => text ? new Date(text).toLocaleDateString() : '' },
     { title: 'Ngày kết thúc', dataIndex: 'end_date', key: 'end_date', render: (text) => text ? new Date(text).toLocaleDateString() : '' },
@@ -158,6 +146,10 @@ const ManufacturingOrderDetailPage = () => {
       </Breadcrumb>
 
       <h1>Chi tiết lệnh sản xuất</h1>
+      <Space style={{ marginBottom: 16 }}>
+        <Button type="primary" onClick={() => console.log('Hoàn thành MO clicked')}>Hoàn thành MO</Button>
+        <Button type="default" onClick={() => console.log('Hủy MO clicked')}>Hủy MO</Button>
+      </Space>
       {error && <div style={{ color: 'red', marginBottom: 16 }}>{error}</div>}
       <Spin spinning={loading} tip="Đang tải dữ liệu...">
         {order && (
@@ -170,7 +162,7 @@ const ManufacturingOrderDetailPage = () => {
               <Descriptions.Item label="Ngày kết thúc">{order.end_date ? new Date(order.end_date).toLocaleDateString() : ''}</Descriptions.Item>
               <Descriptions.Item label="Người tạo">{order.User?.username}</Descriptions.Item>
               <Descriptions.Item label="Trạng thái">
-                <Tag color={statusColors[order.status] || 'default'}>{statusLabels[order.status] || order.status}</Tag>
+                <Tag color={MANUFACTURING_ORDER_STATUS_COLORS[order.status] || 'default'}>{MANUFACTURING_ORDER_STATUS_LABELS[order.status] || order.status}</Tag>
               </Descriptions.Item>
               <Descriptions.Item label="Tiến độ">
                 <Progress percent={calculateProgress()} size="small" />

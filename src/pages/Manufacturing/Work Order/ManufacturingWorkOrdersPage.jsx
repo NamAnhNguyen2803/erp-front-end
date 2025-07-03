@@ -1,32 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Tag, Badge, message, Spin } from 'antd';
+import { WORK_ORDER_STATUS_COLORS, WORK_ORDER_STATUS_LABELS, WORK_ORDER_PRIORITY_COLORS, WORK_ORDER_PRIORITY_LABELS } from '@/constants/workOrderStatus.enum';
 import { getWorkOrders } from '../../../api/manufacturing';
 import ManufacturingLayout from '../../../layouts/ManufacturingLayout';
 import moment from 'moment';
 
-const statusColors = {
-  pending: 'blue',
-  active: 'cyan',
-  finished: 'green',
-  cancelled: 'red',
-};
-const statusLabels = {
-  pending: 'Chờ thực hiện',
-  active: 'Đang thực hiện',
-  finished: 'Hoàn thành',
-  cancelled: 'Đã hủy',
-};
-const priorityColors = {
-  high: 'red',
-  medium: 'orange',
-  low: 'green',
-};
-const priorityLabels = {
-  high: 'Cao',
-  medium: 'Trung bình',
-  low: 'Thấp',
-};
+
 
 export default function ManufacturingWorkOrdersPage() {
   const [data, setData] = useState([]);
@@ -97,7 +77,7 @@ export default function ManufacturingWorkOrdersPage() {
       title: 'Trạng thái',
       dataIndex: 'status',
       key: 'status',
-      render: (text) => <Tag color={statusColors[text] || 'default'}>{statusLabels[text] || text}</Tag>,
+      render: (text) => <Tag color={WORK_ORDER_STATUS_COLORS[text] || 'default'}>{WORK_ORDER_STATUS_LABELS[text] || text}</Tag>,
     },
     {
       title: 'Ngày bắt đầu dự kiến',
@@ -115,7 +95,7 @@ export default function ManufacturingWorkOrdersPage() {
       title: 'Độ ưu tiên',
       dataIndex: 'priority',
       key: 'priority',
-      render: (text) => <Tag color={priorityColors[text] || 'default'}>{priorityLabels[text] || text}</Tag>,
+      render: (text) => <Tag color={WORK_ORDER_PRIORITY_COLORS[text] || 'default'}>{WORK_ORDER_PRIORITY_LABELS[text] || text}</Tag>,
     },
   ];
 
@@ -144,7 +124,7 @@ export default function ManufacturingWorkOrdersPage() {
             defaultValue: '',
             options: [
               { value: '', label: 'Tất cả trạng thái' },
-              ...Object.entries(statusLabels).map(([value, label]) => ({ value, label })),
+              ...Object.entries(WORK_ORDER_STATUS_LABELS).map(([value, label]) => ({ value, label })),
             ],
             onChange: setStatus,
           },
@@ -152,7 +132,7 @@ export default function ManufacturingWorkOrdersPage() {
             defaultValue: '',
             options: [
               { value: '', label: 'Tất cả ưu tiên' },
-              ...Object.entries(priorityLabels).map(([value, label]) => ({ value, label })),
+              ...Object.entries(WORK_ORDER_PRIORITY_LABELS).map(([value, label]) => ({ value, label })),
             ],
             onChange: setPriority,
           },

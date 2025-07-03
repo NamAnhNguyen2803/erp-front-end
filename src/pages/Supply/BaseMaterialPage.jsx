@@ -4,28 +4,26 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Form, Input, Select, Spin, Button, Tag, message, Popconfirm, Space } from 'antd';
 import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import ProductTableLayout from '@/components/ProductTableLayout';
-import { STATUS, STATUS_LABELS } from '@/constants/supplyType.enum';
-
+import { STATUS, STATUS_LABELS, STATUS_COLORS } from '@/constants/supplyType.enum';
 const { Option } = Select;
 const { confirm } = Modal;
 
-const BaseMaterialPage = ({ title, api, idField }) => {
+
+const BaseMaterialPage = ({ title, api, idField, customColumns, onRow }) => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
     const [form] = Form.useForm();
     const [editingItem, setEditingItem] = useState(null);
     const [existingCodes, setExistingCodes] = useState([]);
-
     const fetchData = async () => {
         setLoading(true);
         try {
             const res = await api.get();
-            console.log('[DEBUG] API response:', res.data);
             const rawData = Object.values(res.data)[0] || [];
             const cleaned = rawData
                 .map((item) => ({ ...item, id: item[idField] }))
-                .filter((item) => item.id && item.status === 'active');
+            // .filter((item) => item.id && item.status === 'active');
             setData(cleaned);
             setExistingCodes(cleaned.map((i) => i.code));
         } catch (err) {
@@ -69,6 +67,10 @@ const BaseMaterialPage = ({ title, api, idField }) => {
     };
 
     const handleSubmit = async (values) => {
+        console.log('[DEBUG] Submit values:', values);
+        if (editingItem) {
+            console.log('[DEBUG] Updating ID:', editingItem[idField]);
+        }
         try {
             if (editingItem) {
                 await api.update(editingItem[idField], values);
@@ -84,7 +86,7 @@ const BaseMaterialPage = ({ title, api, idField }) => {
         }
     };
 
-    const columns = [
+    const defaultColumns = [
         { title: 'ID', dataIndex: 'id' },
         { title: 'Mã', dataIndex: 'code' },
         { title: 'Tên', dataIndex: 'name' },
@@ -93,9 +95,9 @@ const BaseMaterialPage = ({ title, api, idField }) => {
             title: 'Trạng thái',
             dataIndex: 'status',
             render: (status) => (
-                <Tag color={status === STATUS.ACTIVE ? 'green' : 'red'}>
-                    {STATUS_LABELS[status]}
-                </Tag>
+                <Tag color={STATUS_COLORS[status]}>
+                    {STATUS_LABELS[status] || 'Không rõ'}
+                </Tag >
             ),
         },
         {
@@ -115,15 +117,15 @@ const BaseMaterialPage = ({ title, api, idField }) => {
             ),
         },
     ];
-
     return (
         <Spin spinning={loading}>
             <ProductTableLayout
                 title={title}
                 showAddButton
                 onAddClick={handleAddClick}
-                columns={columns}
+                columns={Array.isArray(customColumns) ? [...defaultColumns, ...customColumns] : defaultColumns}
                 data={data}
+                onRow={onRow || (() => ({}))}
             />
             <Modal
                 open={modalVisible}

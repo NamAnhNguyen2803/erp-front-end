@@ -12,7 +12,8 @@ import {
   deleteOrderDetail
 } from '../../../api/manufacturing';
 import { getProducts } from '../../../api/products';
-import { Descriptions } from 'antd';
+import { Descriptions, Tag } from 'antd';
+import { MANUFACTURING_ORDER_STATUS_LABELS, MANUFACTURING_ORDER_STATUS_COLORS } from '@/constants/manufacturingStatus.enum';
 const { Option } = Select;
 
 const ManufacturingPlanDetailPage = () => {
@@ -275,7 +276,7 @@ const ManufacturingPlanDetailPage = () => {
   return (
     <div style={{ padding: 24 }}>
       <Descriptions
-        title={`Thông tin kế hoạch: ${order.order_number }`}
+        title={`Thông tin kế hoạch: ${order.order_code }`}
         bordered
         column={2}
         style={{ marginBottom: 24 }}
@@ -283,7 +284,11 @@ const ManufacturingPlanDetailPage = () => {
         <Descriptions.Item label="Plan ID">{order.order_id}</Descriptions.Item>
         <Descriptions.Item label="Người tạo">{order.User?.username || 'Không xác định'}</Descriptions.Item>
         <Descriptions.Item label="Mô tả">{order.description}</Descriptions.Item>
-        <Descriptions.Item label="Trạng thái">{order.status}</Descriptions.Item>
+        <Descriptions.Item label="Trạng thái">
+          <Tag color={MANUFACTURING_ORDER_STATUS_COLORS[order.status] || 'default'}>
+            {MANUFACTURING_ORDER_STATUS_LABELS[order.status] || order.status}
+          </Tag>
+        </Descriptions.Item>
         <Descriptions.Item label="Thời gian bắt đầu">
           {moment(order.start_date).format('DD/MM/YYYY')}
         </Descriptions.Item>

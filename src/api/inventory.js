@@ -4,8 +4,15 @@ export const getWarehouses = () => axios.get(`${API_URL}/warehouses`);
 export const createWarehouse = (data) => axios.post(`${API_URL}/warehouses`, data);
 export const updateWarehouse = (id, data) => axios.put(`${API_URL}/warehouses/${id}`, data);
 export const deleteWarehouse = (id) => axios.delete(`${API_URL}/warehouses/${id}`);
-export const getInventoryByWarehouse = (id) => axios.get(`${API_URL}/warehouse/${id}`);
+export const getInventoryByWarehouse = (id) => axios.get(`${API_URL}/warehouses/${id}`);
 
+export const getInventoryByMaterialId = (materialId) =>
+    axios.get(`${API_URL}/inventory/materials/${materialId}`);
+
+export const getInventoryBySemiProductId = (semiProductId) =>
+    axios.get(`${API_URL}/inventory/semi-products/${semiProductId}`);
+export const getInventoryByProductId = (productId) =>
+    axios.get(`${API_URL}/inventory/products/${productId}`);
 
 export const importGoods = (data) =>
     axios.post(`${API_URL}/transactions/import`, data);
@@ -29,3 +36,5 @@ export const getAllInventoryTransactions = () =>
 // Lấy chi tiết giao dịch theo ID
 export const getTransactionById = (id) =>
     axios.get(`${API_URL}/transactions/${id}`);
+export const getInventoryByWarehouseId = (warehouseId) =>
+    axios.get(`${API_URL}/inventory/warehouse/${warehouseId}`);    

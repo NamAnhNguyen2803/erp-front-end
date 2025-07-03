@@ -9,33 +9,8 @@ import moment from 'moment';
 const { Title } = Typography;
 
 
-const statusLabels = {
-  pending: 'Chờ thực hiện',
-  in_progress: 'Đang thực hiện',
-  completed: 'Hoàn thành',
-  cancelled: 'Đã hủy',
-  paused: 'Tạm dừng'
-};
-
-const statusColors = {
-  pending: 'blue',
-  in_progress: 'cyan',
-  completed: 'green',
-  cancelled: 'red',
-  paused: 'orange'
-};
-
-const priorityColors = {
-  high: 'red',
-  medium: 'orange',
-  low: 'green',
-};
-
-const priorityLabels = {
-  high: 'Cao',
-  medium: 'Trung bình',
-  low: 'Thấp',
-};
+import { WORK_ORDER_STATUS_LABELS, WORK_ORDER_STATUS_COLORS, WORK_ORDER_PRIORITY_COLORS, WORK_ORDER_PRIORITY_LABELS, WORK_ORDER_STATUS } from '@/constants/workOrderStatus.enum';
+import { MANUFACTURING_ORDER_STATUS_COLORS, MANUFACTURING_ORDER_STATUS_LABELS } from '@/constants/manufacturingStatus.enum';
 
 export default function ManufacturingWorkOrderDetailPage() {
   const { id } = useParams();
@@ -236,10 +211,10 @@ export default function ManufacturingWorkOrderDetailPage() {
     // Nếu chưa có timeline items nào, hiển thị trạng thái hiện tại
     if (items.length === 0) {
       items.push({
-        color: statusColors[workOrder.status] || 'blue',
+        color: WORK_ORDER_STATUS_COLORS[workOrder.status] || 'blue',
         children: (
           <>
-            <b>{statusLabels[workOrder.status] || workOrder.status}</b>
+            <b>{WORK_ORDER_STATUS_LABELS[workOrder.status] || workOrder.status}</b>
             <br />
             <small>Trạng thái hiện tại</small>
           </>
@@ -344,13 +319,13 @@ export default function ManufacturingWorkOrderDetailPage() {
               <Descriptions.Item label="Đã hoàn thành">{workOrder.completed_qty || 0}</Descriptions.Item>
               <Descriptions.Item label="Bộ phận">{workOrder.department || '—'}</Descriptions.Item>
               <Descriptions.Item label="Độ ưu tiên">
-                <Tag color={priorityColors[workOrder.priority] || 'default'}>
-                  {priorityLabels[workOrder.priority] || workOrder.priority || '—'}
+                <Tag color={WORK_ORDER_PRIORITY_COLORS[workOrder.priority] || 'default'}>
+                  {WORK_ORDER_PRIORITY_LABELS[workOrder.priority] || workOrder.priority || '—'}
                 </Tag>
               </Descriptions.Item>
               <Descriptions.Item label="Trạng thái">
-                <Tag color={statusColors[workOrder.status] || 'default'}>
-                  {statusLabels[workOrder.status] || workOrder.status}
+                <Tag color={WORK_ORDER_STATUS_COLORS[workOrder.status] || 'default'}>
+                  {WORK_ORDER_STATUS_LABELS[workOrder.status] || workOrder.status}
                 </Tag>
               </Descriptions.Item>
               <Descriptions.Item label="Ngày bắt đầu dự kiến">{formatDate(workOrder.planned_start)}</Descriptions.Item>
@@ -408,8 +383,8 @@ export default function ManufacturingWorkOrderDetailPage() {
               <Descriptions.Item label="Ngày bắt đầu">{formatDate(workOrder.ManufacturingOrder?.start_date)}</Descriptions.Item>
               <Descriptions.Item label="Ngày kết thúc">{formatDate(workOrder.ManufacturingOrder?.end_date)}</Descriptions.Item>
               <Descriptions.Item label="Trạng thái">
-                <Tag color={statusColors[workOrder.ManufacturingOrder?.status] || 'default'}>
-                  {statusLabels[workOrder.ManufacturingOrder?.status] || workOrder.ManufacturingOrder?.status || '—'}
+                <Tag color={MANUFACTURING_ORDER_STATUS_COLORS[workOrder.ManufacturingOrder?.status] || 'default'}>
+                  {MANUFACTURING_ORDER_STATUS_LABELS[workOrder.ManufacturingOrder?.status] || workOrder.ManufacturingOrder?.status || '—'}
                 </Tag>
               </Descriptions.Item>
             </Descriptions>

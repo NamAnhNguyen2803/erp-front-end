@@ -19,8 +19,8 @@ const HeaderComponent = () => {
 
 
   const bomMenuItems = [
-    { key: "/boms/products", label: <Link to="/boms/products">BOM sản phẩm</Link> },
-    { key: "/boms/semi-products", label: <Link to="/boms/semi-products">BOM bán thành phẩm</Link> },
+    { key: "/boms/product", label: <Link to="/boms/product">BOM sản phẩm</Link> },
+    { key: "/boms/semi-product", label: <Link to="/boms/semi-product">BOM bán thành phẩm</Link> },
   ];
 
   const manufacturingMenuItems = [

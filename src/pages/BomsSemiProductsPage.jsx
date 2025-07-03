@@ -198,7 +198,7 @@ const BomsProductsPage = () => {
     <div style={{ padding: 24 }}>
       <Card>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
-          <h1>Danh sách BOM - Sản phẩm</h1>
+          <h1>Danh sách BOM- Bán thành phẩm</h1>
           <Space>
             <Search
               placeholder="Tìm theo tên sản phẩm"

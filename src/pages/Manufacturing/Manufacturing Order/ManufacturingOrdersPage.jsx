@@ -2,29 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProductTableLayout from '@/components/ProductTableLayout';
 import { Tag, Progress, Button, message, Spin } from 'antd';
-import { getAllOrders } from '@/api/manufacturing';
+import { getAllOrders, completeManufacturingOrder, deleteOrder } from '@/api/manufacturing';
 import ManufacturingLayout from '@/layouts/ManufacturingLayout';
-const statusColors = {
-  pending: 'blue',
-  active: 'cyan',
-  finished: 'green',
-  cancelled: 'red',
-};
-
-const statusLabels = {
-  pending: 'Chờ thực hiện',
-  active: 'Đang thực hiện',
-  finished: 'Hoàn thành',
-  cancelled: 'Đã hủy',
-};
-
-const statusOptions = [
-  { value: '', label: 'Tất cả trạng thái' },
-  { value: 'pending', label: 'Chờ thực hiện' },
-  { value: 'active', label: 'Đang thực hiện' },
-  { value: 'finished', label: 'Hoàn thành' },
-  { value: 'cancelled', label: 'Đã hủy' },
-];
+import { MANUFACTURING_ORDER_STATUS_COLORS, MANUFACTURING_ORDER_STATUS_LABELS, MANUFACTURING_ORDER_STATUS_OPTIONS, MANUFACTURING_ORDER_STATUS } from '@/constants/manufacturingStatus.enum';
 
 const ManufacturingOrdersPage = () => {
   const [search, setSearch] = useState('');
@@ -34,22 +14,49 @@ const ManufacturingOrdersPage = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const fetchOrders = () => {
     setLoading(true);
     getAllOrders()
       .then((res) => {
         setData(res.data.orders || []);
         setLoading(false);
+        console.log('Fetched orders:', res.data.orders);
       })
       .catch(() => {
         setError('Không thể tải dữ liệu');
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    fetchOrders();
   }, []);
+
+  const handleCompleteOrder = async (orderId) => {
+    try {
+      await completeManufacturingOrder(orderId, {});
+      message.success('Lệnh sản xuất đã hoàn thành!');
+      fetchOrders(); // Refresh data
+    } catch (error) {
+      message.error('Không thể hoàn thành lệnh sản xuất.');
+      console.error('Error completing order:', error);
+    }
+  };
+
+  const handleDeleteOrder = async (orderId) => {
+    try {
+      await deleteOrder(orderId);
+      message.success('Lệnh sản xuất đã bị xóa!');
+      fetchOrders(); // Refresh data
+    } catch (error) {
+      message.error('Không thể xóa lệnh sản xuất.');
+      console.error('Error deleting order:', error);
+    }
+  };
 
   const columns = [
     { title: 'ID', dataIndex: 'order_id', key: 'order_id' },
-    { title: 'Mã lệnh', dataIndex: 'order_number', key: 'order_number' },
+    { title: 'Mã lệnh', dataIndex: 'order_code', key: 'order_code' },
     {
       title: 'Ngày tạo',
       dataIndex: 'created_at',
@@ -61,8 +68,8 @@ const ManufacturingOrdersPage = () => {
       dataIndex: 'status',
       key: 'status',
       render: (text) => (
-        <Tag color={statusColors[text] || 'default'}>
-          {statusLabels[text] || text}
+        <Tag color={MANUFACTURING_ORDER_STATUS_COLORS[text] || 'default'}>
+          {MANUFACTURING_ORDER_STATUS_LABELS[text] || text}
         </Tag>
       ),
     },
@@ -70,32 +77,51 @@ const ManufacturingOrdersPage = () => {
       title: 'Tiến độ',
       dataIndex: 'progress',
       key: 'progress',
-      render: (_, record) => <Progress percent={0} size="small" />,
+      render: (progress) => <Progress percent={progress} size="small" />,
     },
     {
       title: 'Hành động',
       key: 'action',
       render: (_, record) => (
-        <Button
-          type="link"
-          onClick={() => navigate(`/manufacturing-orders/${record.order_id}`)}
-        >
-          Xem chi tiết
-        </Button>
+        <>
+          <Button
+            type="link"
+            onClick={() => navigate(`/manufacturing-orders/${record.order_id}`)}
+          >
+            Xem chi tiết
+          </Button>
+          {record.status !== MANUFACTURING_ORDER_STATUS.COMPLETED && record.status !== MANUFACTURING_ORDER_STATUS.CANCELLED && (
+            <Button
+              type="link"
+              onClick={() => handleCompleteOrder(record.order_id)}
+            >
+              Hoàn thành
+            </Button>
+          )}
+          {record.status !== 'cancelled' && (
+            <Button
+              type="link"
+              danger
+              onClick={() => handleDeleteOrder(record.order_id)}
+            >
+              Xóa
+            </Button>
+          )}
+        </>
       ),
     },
   ];
 
   const filteredData = data.filter(
     (item) =>
-      (item.order_number?.toLowerCase().includes(search.toLowerCase()) ||
+      (item.order_code?.toLowerCase().includes(search.toLowerCase()) ||
         item.Product?.name?.toLowerCase().includes(search.toLowerCase()) ||
         item.ManufacturingPlan?.plan_code
           ?.toLowerCase()
           .includes(search.toLowerCase())) &&
       (status === '' || item.status === status)
   );
-
+console.log('Filtered Data:', filteredData);
   return (
     <Spin spinning={loading} tip="Đang tải dữ liệu...">
       <ManufacturingLayout
@@ -108,7 +134,7 @@ const ManufacturingOrdersPage = () => {
         filters={[
           {
             defaultValue: '',
-            options: statusOptions,
+            options: MANUFACTURING_ORDER_STATUS_OPTIONS,
             onChange: setStatus,
           },
         ]}

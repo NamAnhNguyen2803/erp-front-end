@@ -6,7 +6,7 @@ import {
   createWarehouse,
   updateWarehouse,
   deleteWarehouse,
-  getInventoryByWarehouse,
+  getInventoryByWarehouseId,
 } from '../../api/inventory';
 
 const InventoryWarehousesPage = () => {
@@ -39,10 +39,48 @@ const InventoryWarehousesPage = () => {
   const fetchInventory = async (warehouseId) => {
     setInventoryLoading(true);
     try {
-      const res = await getInventoryByWarehouse(warehouseId);
-      // Giả sử API trả về res.data.inventory là mảng tồn kho
-      setInventory(res.data.inventory.map(item => ({ ...item, key: item.id || item.product_id })));
-    } catch {
+      const res = await getInventoryByWarehouseId(warehouseId);
+      const rawData = res.data?.materials || [];
+      const materials = res.data?.materials || [];
+      const semiProducts = res.data?.semiProducts || [];
+      const products = res.data?.products || [];
+
+      const mappedInventory = [
+        ...materials.map(item => ({
+          key: `m-${item.inventory_id}`,
+          code: item.Material?.code || '',
+          name: item.Material?.name || '',
+          quantity: item.quantity,
+          unit: item.unit || item.Material?.unit || '',
+          type: 'Nguyên vật liệu',
+          warehouse: item.Warehouse?.name || '',
+        })),
+        ...semiProducts.map(item => ({
+          key: `s-${item.inventory_id}`,
+          code: item.SemiProduct?.code || '',
+          name: item.SemiProduct?.name || '',
+          quantity: item.quantity,
+          unit: item.unit || item.SemiProduct?.unit || '',
+          type: 'Bán thành phẩm',
+          warehouse: item.Warehouse?.name || '',
+        })),
+        ...products.map(item => ({
+          key: `p-${item.inventory_id}`,
+          code: item.Product?.code || '',
+          name: item.Product?.name || '',
+          quantity: item.quantity,
+          unit: item.unit || item.Product?.unit || '',
+          type: 'Thành phẩm',
+          warehouse: item.Warehouse?.name || '',
+        })),
+      ];
+
+      setInventory(mappedInventory);
+
+
+      console.log('Tồn kho:', res.data);
+    } catch (error) {
+      console.log(error);
       message.error('Lỗi khi tải tồn kho');
     } finally {
       setInventoryLoading(false);
@@ -154,17 +192,38 @@ const InventoryWarehousesPage = () => {
 
   const inventoryColumns = [
     {
-      title: 'Sản phẩm',
-      dataIndex: 'product_name',
-      key: 'product_name',
+      title: 'Loại',
+      dataIndex: 'type',
+      key: 'type',
+    },
+    {
+      title: 'Mã',
+      dataIndex: 'code',
+      key: 'code',
+    },
+    {
+      title: 'Tên',
+      dataIndex: 'name',
+      key: 'name',
     },
     {
       title: 'Số lượng',
       dataIndex: 'quantity',
       key: 'quantity',
     },
-    // Thêm cột nếu cần, ví dụ unit, giá trị...
+    {
+      title: 'Đơn vị',
+      dataIndex: 'unit',
+      key: 'unit',
+    },
+    {
+      title: 'Kho',
+      dataIndex: 'warehouse',
+      key: 'warehouse',
+    },
   ];
+
+
 
   return (
     <div>

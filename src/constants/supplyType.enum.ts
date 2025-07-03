@@ -12,3 +12,9 @@ export const STATUS_LABELS = {
   [STATUS.TEST]: 'Thử nghiệm',
 };
 
+export const STATUS_COLORS = {
+  [STATUS.ACTIVE]: 'green',
+  [STATUS.INACTIVE]: 'red',
+  [STATUS.UNKNOWN]: 'gray',
+  [STATUS.TEST]: 'yellow',  
+};

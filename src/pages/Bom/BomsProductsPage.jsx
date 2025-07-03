@@ -24,15 +24,20 @@ import {
   getBomById,
   updateBom,
   deleteBom,
-} from '../api/bomApi';
-import { getMaterials } from '../api/materials';
-import { getProducts } from '../api/products';
-import BomItemsTreeTable from '../components/BomItemsTreeTable';
 
+} from '@/api/bomApi';
+import {
+    createBomItem,
+} from '@/api/boms';
+import { getMaterials } from '@/api/materials';
+import { getProducts } from '@/api/products';
+import BomItemsTreeTable from '@/components/BomItemsTreeTable';
+import { get } from 'lodash-es';
+import BOMItemForm from './BomItemsForm';
 const { Search } = Input;
 const { Option } = Select;
 
-const BomsSemiProductsPage = () => {
+const BomsProductsPage = () => {
   const [boms, setBoms] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
@@ -44,6 +49,10 @@ const BomsSemiProductsPage = () => {
   const [originalBoms, setOriginalBoms] = useState([]);
   const [materials, setMaterials] = useState([]);
   const [products, setProducts] = useState([]);
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [editingBom, setEditingBom] = useState(null);
+  const [orderMap, setOrderMap] = useState({});
+
   const fetchBoms = async () => {
     setLoading(true);
     try {
@@ -64,6 +73,7 @@ const BomsSemiProductsPage = () => {
     }
   };
 
+
   useEffect(() => {
     fetchBoms();
   }, []);
@@ -73,7 +83,6 @@ const BomsSemiProductsPage = () => {
       try {
         const res = await getMaterials();
         setMaterials(Array.isArray(res.data) ? res.data : res.data.materials || []);
-        console.log(materials);
       } catch (err) {
         message.error('Lỗi khi tải nguyên vật liệu');
         console.error(err);
@@ -123,28 +132,30 @@ const BomsSemiProductsPage = () => {
   const handleAddBomItem = async () => {
     try {
       const values = await itemForm.validateFields();
-      const bom = await getBomById(currentBomId);
-      const newItem = {
-        ...values,
-        item_type: 'material',
-        reference: materials.find(m => m.product_id === values.material_id)?.code || '',
-        bom_level: 1,
+
+      const payload = {
+        bom_id: currentBomId,
+        item_type: values.item_type,
+        reference_id: values.reference_id,
+        bom_level: values.bom_level,
+        reference: values.reference || '',
+        quantity: values.quantity,
+        waste_percent: values.waste_percent || 0,
+        notes: values.notes || '',
       };
-      const newItems = [...(bom.items || []), newItem];
 
-      await updateBom(currentBomId, {
-        version: bom.version,
-        notes: bom.notes,
-        items: newItems,
-      });
+      await createBomItem(payload);
 
-      message.success('Thêm nguyên vật liệu thành công');
+      message.success('Thêm item vào BOM thành công');
+      itemForm.resetFields();
       setIsItemModalVisible(false);
       fetchBoms();
     } catch (error) {
-      message.error('Lỗi khi thêm nguyên vật liệu');
+      console.error(error);
+      message.error('Lỗi khi thêm item vào BOM');
     }
   };
+
 
   const handleCreateBom = async (values) => {
     try {
@@ -165,6 +176,36 @@ const BomsSemiProductsPage = () => {
       fetchBoms();
     } catch {
       message.error('Xóa BOM thất bại');
+    }
+  };
+
+  const openEditModal = (bom) => {
+    setEditingBom(bom);
+    form.setFieldsValue({
+      product_id: bom.product_id,
+      version: bom.version,
+      plan_id: bom.plan_id,
+      notes: bom.notes,
+    });
+    setIsEditModalVisible(true);
+  };
+
+  const handleUpdateBom = async () => {
+    try {
+      const values = await form.validateFields();
+      await updateBom(editingBom.bom_id, {
+        bom_id: editingBom.bom_id,
+        ...values,
+        items: editingBom.items || [],
+      });
+      message.success('Cập nhật BOM thành công');
+      setIsEditModalVisible(false);
+      setEditingBom(null);
+      fetchBoms();
+      form.resetFields();
+    } catch (err) {
+      console.error(err);
+      message.error('Cập nhật BOM thất bại');
     }
   };
 
@@ -190,6 +231,12 @@ const BomsSemiProductsPage = () => {
       key: 'created_by',
     },
     {
+      title: 'Thuộc đơn hàng',
+      dataIndex: ['ManufacturingOrder', 'order_code'],
+      key: 'order_code',
+    },
+
+    {
       title: 'Hành động',
       key: 'action',
       render: (_, record) => (
@@ -198,7 +245,12 @@ const BomsSemiProductsPage = () => {
             + Nguyên vật liệu
           </Button>
 
-          <Button icon={<EditOutlined />} disabled />
+          <Button
+            icon={<EditOutlined />}
+            onClick={() => openEditModal(record)}
+            disabled={loading}
+
+          />
           <Popconfirm
             title="Bạn có chắc muốn xóa BOM này?"
             onConfirm={() => handleDeleteBom(record.bom_id)}
@@ -266,32 +318,15 @@ const BomsSemiProductsPage = () => {
           setIsItemModalVisible(false);
           setCurrentBomId(null);
         }}
-
         onOk={handleAddBomItem}
         okText="Thêm"
         cancelText="Hủy"
         width={600}
       >
-        <Form layout="vertical" form={itemForm}>
-          <Form.Item name="material_id" label="Nguyên vật liệu" rules={[{ required: true }]}>
-            <Select placeholder="Chọn nguyên vật liệu">
-              {materials.map((material) => (
-                <Option key={material.material_id} value={material.material_id}>
-                  {material.code} - {material.name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Form.Item name="quantity" label="Số lượng" rules={[{ required: true }]}>
-            <InputNumber min={0} style={{ width: '100%' }} />
-          </Form.Item>
-          <Form.Item name="waste_percent" label="% Hao hụt">
-            <InputNumber min={0} max={100} style={{ width: '100%' }} />
-          </Form.Item>
-          <Form.Item name="notes" label="Ghi chú">
-            <Input />
-          </Form.Item>
-        </Form>
+        <BOMItemForm
+          form={itemForm}
+          onSubmit={handleAddBomItem}
+        />
       </Modal>
 
       {/* Modal tạo BOM mới */}
@@ -299,9 +334,10 @@ const BomsSemiProductsPage = () => {
         title="Tạo BOM mới"
         open={isCreateModalVisible}
         onCancel={() => setIsCreateModalVisible(false)}
+        onOk={() => handleCreateBom()}
         footer={null}
       >
-        <Form layout="vertical" form={form} onFinish={handleCreateBom}>
+        <Form layout="vertical" form={form} onFinish={handleCreateBom}  onSubmit={handleCreateBom}>
           <Form.Item
             name="product_id"
             label="Sản phẩm"
@@ -322,7 +358,6 @@ const BomsSemiProductsPage = () => {
               ))}
             </Select>
           </Form.Item>
-
           <Form.Item
             name="version"
             label="Phiên bản"
@@ -330,15 +365,15 @@ const BomsSemiProductsPage = () => {
           >
             <Input />
           </Form.Item>
-          <Form.Item name="notes" label="Ghi chú">
-            <Input.TextArea />
-          </Form.Item>
           <Form.Item
-            name="created_by"
-            label="ID người tạo"
+            name="plan_id"
+            label="Kế hoạch"
             rules={[{ required: true }]}
           >
             <Input />
+          </Form.Item>
+          <Form.Item name="notes" label="Ghi chú">
+            <Input.TextArea />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">
@@ -347,8 +382,55 @@ const BomsSemiProductsPage = () => {
           </Form.Item>
         </Form>
       </Modal>
+
+
+      {/* Modal chỉnh sửa BOM */}
+      <Modal
+        title="Chỉnh sửa BOM"
+        open={isEditModalVisible}
+        onCancel={() => {
+          setIsEditModalVisible(false);
+          setEditingBom(null);
+        }}
+        onOk={handleUpdateBom}
+        okText="Cập nhật"
+        cancelText="Hủy"
+      >
+        <Form layout="vertical" form={form}>
+          <Form.Item
+            name="product_id"
+            label="Sản phẩm"
+            rules={[{ required: true }]}
+          >
+            <Select
+              showSearch
+              placeholder="Chọn sản phẩm"
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option?.children?.toLowerCase().includes(input.toLowerCase())
+              }
+            >
+              {products.map(product => (
+                <Option key={product.product_id} value={product.product_id}>
+                  {product.code} - {product.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name="version" label="Phiên bản" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="order_id" label="Kế hoạch" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="notes" label="Ghi chú">
+            <Input.TextArea />
+          </Form.Item>
+        </Form>
+      </Modal>
+
     </div>
   );
 };
 
-export default BomsSemiProductsPage;
+export default BomsProductsPage;

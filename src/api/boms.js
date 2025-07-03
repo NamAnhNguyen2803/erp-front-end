@@ -16,3 +16,15 @@ export const updateBom = (bom_id, data) => axios.put(`${API_URL}/boms/${bom_id}`
 
 // DELETE /api/v1/boms/:bom_id - Delete BOM
 export const deleteBom = (bom_id) => axios.delete(`${API_URL}/boms/${bom_id}`);
+
+// GET /api/v1/bom-items - Get all BOM items
+export const getAllBomItems = () => axios.get(`${API_URL}/bom-items`);
+
+// POST /api/v1/bom-items - Create a new BOM item
+export const createBomItem = (data) => axios.post(`${API_URL}/bom-items`, data);
+
+// PUT /api/v1/bom-items/:item_id - Update BOM item
+export const updateBomItem = (item_id, data) => axios.put(`${API_URL}/bom-items/${item_id}`, data);
+
+// DELETE /api/v1/bom-items/:item_id - Delete BOM item
+export const deleteBomItem = (item_id) => axios.delete(`${API_URL}/bom-items/${item_id}`);
